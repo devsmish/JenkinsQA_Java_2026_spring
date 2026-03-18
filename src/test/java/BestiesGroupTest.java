@@ -64,5 +64,21 @@ public class BestiesGroupTest {
         driver.quit();
     }
 
+    @Test
+    public void peppaPigChannelTest() {
+        WebDriver driver = new ChromeDriver();
 
+        // открываем официальный канал Свинки Пеппы
+        driver.get("https://www.youtube.com/@PeppaPigRussianOfficial");
+
+        // Находим заголовок канала
+        WebElement channelTitle = driver.findElement(
+                By.xpath("//*[@id='page-header']/yt-page-header-renderer/yt-page-header-view-model/div/div[1]/div/yt-dynamic-text-view-model/h1")
+        );
+
+        // Проверяем текст заголовка
+        assertEquals("Свинка Пеппа Русский - Официальный канал", channelTitle.getText());
+
+        driver.quit();
+    }
 }
