@@ -50,4 +50,20 @@ public class SergeyTest {
 
         driver.quit();
     }
+
+    @Test
+    public void test() {
+        WebDriver driver = new ChromeDriver();
+
+        driver.get("https://www.wikipedia.org/");
+
+        driver.findElement(By.id("searchInput")).sendKeys("Selenium");
+        driver.findElement(By.xpath("//button[@type='submit']")).click();
+
+        WebElement text = driver.findElement(By.xpath("//h1/span"));
+
+        Assert.assertEquals(text.getText(), "Selenium");
+
+        driver.quit();
+    }
 }
