@@ -178,4 +178,24 @@ public class BestiesGroupTest {
         driver1.quit();
 
     }
+
+    @Test
+    public void testVVSearchBar() {
+        String testStr = "Индейка";
+
+        WebDriver driver = new ChromeDriver();
+        driver.get("https://vkusvill.ru/");
+        driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
+
+        driver.findElement(By.xpath("//button[@data-place=\"header_top\"]")).click();
+        WebElement searchInput = driver.findElement(By.xpath("//input[@id=\"js-vv21-search__search-input\"]"));
+        searchInput.sendKeys(testStr);
+        searchInput.sendKeys(Keys.ENTER);
+
+        WebElement text = driver.findElement(By.xpath("//div[@id=\"search-result-general-container\"]//h1"));
+        Assert.assertEquals(text.getText(), testStr);
+
+        driver.quit();
+    }
+
 }
