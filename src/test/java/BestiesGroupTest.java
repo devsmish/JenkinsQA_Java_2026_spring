@@ -178,4 +178,18 @@ public class BestiesGroupTest {
         driver1.quit();
 
     }
+
+    @Test
+    public void testSeleniumDev() {
+        WebDriver driver = new ChromeDriver();
+        driver.get("https://www.selenium.dev");
+        driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
+
+        driver.findElement(By.xpath("//button[@class=\"navbar-toggler\"]")).click();
+        driver.findElement(By.xpath("//div[@id=\"main_navbar\"]//a[@href=\"/documentation\"]")).click();
+
+        WebElement title = driver.findElement(By.xpath("//div[@class=\"td-content\"]/h1"));
+        Assert.assertEquals(title.getText(), "The Selenium Browser Automation Project");
+        driver.quit();
+    }
 }
