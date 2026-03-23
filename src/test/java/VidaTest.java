@@ -15,7 +15,7 @@ public class VidaTest {
 
         WebDriver driver = new ChromeDriver();
         driver.get("https://xn--55-6kc9apknedkg.xn--p1ai/");
-//Test11
+//Test1
         boolean Flag = false;
         List<WebElement> textSecondary = driver.findElements(By.className("text-secondary"));
         String testText = "ПРЕИМУЩЕСТВА";
