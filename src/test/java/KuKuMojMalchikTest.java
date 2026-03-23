@@ -5,7 +5,9 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-public class kuKuMojMalchikTest {
+import java.time.Duration;
+
+public class KuKuMojMalchikTest {
     @Test
     public void testGismeteo() {
         WebDriver driver = new ChromeDriver();
@@ -19,5 +21,20 @@ public class kuKuMojMalchikTest {
         Assert.assertEquals(text.getText(), "Погода в Москве");
         driver.quit();
 
+    }
+
+    @Test
+    public void testEditaOrlovaOnliner() {
+        WebDriver driver = new ChromeDriver();
+
+        driver.get("https://www.onliner.by/");
+        WebElement button = driver.findElement(By.cssSelector(".auth-bar__item--text"));
+        driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
+        button.click();
+
+        WebElement text = driver.findElement(By.cssSelector(".auth-form__title.auth-form__title_big.auth-form__title_condensed-default"));
+        Assert.assertEquals(text.getText(),"Вход");
+
+        driver.quit();
     }
 }
