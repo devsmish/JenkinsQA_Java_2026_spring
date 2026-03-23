@@ -11,7 +11,7 @@ import org.testng.annotations.Test;
 
 public class GroupFutureAqaTest {
     private WebDriver driver;
-
+   //коммент чтобы в комите появился измененный файл
     @BeforeMethod
     public void setup() {
         ChromeOptions options = new ChromeOptions();
