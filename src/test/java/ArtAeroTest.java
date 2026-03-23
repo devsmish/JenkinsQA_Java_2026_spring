@@ -29,7 +29,6 @@ public class ArtAeroTest {
 
         Assert.assertEquals(buttonLoginn.getText(), "Регистрация");
 
-
         driver.quit();
 
 
