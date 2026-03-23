@@ -39,7 +39,7 @@ public class KuKuMojMalchikTest {
     }
 
     @Test
-    public void TestOnlinerCart() {
+    public void TestEditaOrlovaOnlinerCart() {
         WebDriver driver = new ChromeDriver();
 
         driver.get("https://www.onliner.by/");
