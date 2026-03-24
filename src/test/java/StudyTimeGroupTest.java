@@ -1,9 +1,13 @@
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.Test;
 import org.testng.Assert;
 
@@ -59,4 +63,26 @@ public class StudyTimeGroupTest {
         driver.quit();
     }
 
+    @Test
+    public void testPluginsPageSearchCli() {
+        WebDriver driver = new ChromeDriver();
+        Actions actions = new Actions(driver);
+
+        driver.get("https://plugins.jenkins.io/");
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+
+        WebElement inpFindPlugins = driver.findElement(By.xpath("//input[@name='query']"));
+        actions.moveToElement(inpFindPlugins)
+                .click()
+                .sendKeys("qwertyuiop")
+                .sendKeys(Keys.ENTER)
+                .build()
+                .perform();
+
+        WebElement txtNoResultsFound = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='no-results']/p")));
+
+        Assert.assertEquals(txtNoResultsFound.getText(), "You search did not return any results. Please try changing your search criteria or reloading the browser.");
+
+        driver.quit();
+    }
 }
