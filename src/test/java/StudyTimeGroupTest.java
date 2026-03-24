@@ -85,4 +85,23 @@ public class StudyTimeGroupTest {
 
         driver.quit();
     }
+    
+    @Test
+    public void testContribPage() {
+        WebDriver driver = new ChromeDriver();
+
+        driver.get("https://contributors.jenkins.io/");
+
+        List<WebElement> weContributorNames = driver.findElements(By.xpath("//h3"));
+
+        List<String> contributorNames = new ArrayList<>();
+
+        for (WebElement contributorName : weContributorNames) {
+            contributorNames.add(contributorName.getText());
+        }
+
+        Assert.assertTrue(contributorNames.contains("Bruno Verachten"));
+
+        driver.quit();
+    }
 }
