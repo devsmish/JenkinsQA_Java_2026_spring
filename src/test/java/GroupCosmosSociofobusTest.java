@@ -25,6 +25,7 @@ public class GroupCosmosSociofobusTest {
 
         driver.quit();
     }
+
     @Test
     public void gismeteoTest() {
 
