@@ -7,7 +7,7 @@ import org.testng.annotations.Test;
 
 import java.time.Duration;
 
-public class KuKuMojMalchikID {
+public class KuKuMojMalchikIDTest {
 
     @Test
     public void testID() {
