@@ -37,4 +37,18 @@ public class KuKuMojMalchikTest {
 
         driver.quit();
     }
+
+    @Test
+    public void TestEditaOrlovaOnlinerCart() {
+        WebDriver driver = new ChromeDriver();
+
+        driver.get("https://www.onliner.by/");
+        WebElement button = driver.findElement(By.cssSelector("a[title='Корзина']"));
+        button.click();
+
+        WebElement title = driver.findElement(By.cssSelector("div.cart-form__title"));
+
+        Assert.assertEquals(title.getText(),"Корзина");
+        driver.quit();
+    }
 }
