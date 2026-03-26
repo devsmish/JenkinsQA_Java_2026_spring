@@ -7,6 +7,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.time.Duration;
+import java.util.List;
 
 public class NoGroupTest {
 
@@ -48,7 +49,6 @@ public class NoGroupTest {
         }
     }
 
-
     @Test
     public void testFormWithValidPositivePetrP(){
         final String validUserName = "MyTestUserName";
@@ -76,7 +76,6 @@ public class NoGroupTest {
             Assert.assertEquals(outMessage, "Все проверки пройдены! Форма валидна.");
         }
     }
-
 
     @Test
     public void testFormWithValidNegativeUserNamePetrP(){
@@ -112,7 +111,6 @@ public class NoGroupTest {
         }
     }
 
-
     @Test
     public void testFormWithValidNegativeUserMail1PetrP(){
         final String validUserName = "MyTestUserName";
@@ -145,9 +143,7 @@ public class NoGroupTest {
             Assert.assertEquals(outMessage, "Форма содержит ошибки. Исправьте их и попробуйте снова.");
             Assert.assertEquals(errEmailMessage, "Email должен содержать символ @");
         }
-
     }
-
 
     @Test
     public void testFormWithValidNegativeUserMail2PetrP(){
@@ -181,9 +177,7 @@ public class NoGroupTest {
             Assert.assertEquals(outMessage, "Форма содержит ошибки. Исправьте их и попробуйте снова.");
             Assert.assertEquals(errEmailMessage, "Email должен содержать символ .");
         }
-
     }
-
 
     @Test
     public void testFormWithValidNegativeUserPass1PetrP(){
@@ -219,7 +213,6 @@ public class NoGroupTest {
         }
     }
 
-
     @Test
     public void testFormWithValidNegativeUserPass2PetrP(){
         final String validUserName = "MyTestUserName";
@@ -251,6 +244,77 @@ public class NoGroupTest {
 
             Assert.assertEquals(outMessage, "Форма содержит ошибки. Исправьте их и попробуйте снова.");
             Assert.assertEquals(errPassMessage, "Password должен содержать минимум 8 символов, включая буквы и цифры");
+        }
+    }
+
+    @Test
+    public void testCheckFindLine() {
+        WebDriver driver = new ChromeDriver();
+        try {
+            driver.get("https://wooordhunt.ru/dic/content/en_ru");
+            driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
+
+            WebElement findLine = driver.findElement(By.id("hunted_word"));
+            findLine.sendKeys("cat");
+            WebElement buttonFind = driver.findElement(By.id("hunted_word_submit"));
+            buttonFind.click();
+            WebElement word = driver.findElement(By.xpath("//div[@id = 'wd_title']/h1"));
+            word.getText();
+
+            Assert.assertEquals(word.getText(), "Cat");
+        } finally {
+            driver.quit();
+        }
+    }
+
+    @Test
+    public void testSearchSuggestionsContent() {
+        final String productName = "now";
+
+        WebDriver driver = new ChromeDriver();
+        try {
+            driver.get("https://www.apteka.ru");
+
+            driver.findElement(By.className("Modal__close")).click();
+
+            WebElement searchInput = driver.findElement(By.id("apteka-search"));
+            searchInput.click();
+            searchInput.sendKeys(productName);
+
+            driver.manage().timeouts().implicitlyWait(Duration.ofMillis(2000));
+            List<WebElement> actualSearchSuggestionsList = driver.findElements(By.className("SearchBoxSuggest__suggest"));
+
+            Assert.assertNotEquals(actualSearchSuggestionsList.size(), 0);
+            for (WebElement element : actualSearchSuggestionsList) {
+                Assert.assertTrue(element.getText().contains(productName));
+            }
+        } finally {
+            driver.quit();
+        }
+    }
+
+    @Test
+    public void testSearchProduct() {
+        final String productName = "now";
+
+        WebDriver driver = new ChromeDriver();
+        try {
+            driver.get("https://www.apteka.ru");
+
+            driver.findElement(By.className("Modal__close")).click();
+
+            WebElement searchInput = driver.findElement(By.id("apteka-search"));
+            searchInput.click();
+            searchInput.sendKeys(productName);
+
+            driver.manage().timeouts().implicitlyWait(Duration.ofMillis(2000));
+            WebElement searchButton = driver.findElement(By.className("SearchBox__input-submit"));
+            searchButton.click();
+
+            String searchResultTitle = driver.findElement(By.className("SearchResultTitle__found")).getText();
+            Assert.assertTrue(searchResultTitle.contains(productName), "Product search failed");
+        } finally {
+            driver.quit();
         }
     }
 }
