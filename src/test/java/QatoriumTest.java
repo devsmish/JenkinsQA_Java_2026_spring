@@ -36,14 +36,16 @@ public class QatoriumTest {
 
             Actions actions = new Actions(driver);
             WebElement color = driver.findElement(By.id("color3"));
-            actions.moveToElement(color).click();
+            actions.moveToElement(color).perform();
+            color.click();
 
             WebElement selectElement = driver.findElement(By.id("automation"));
             Select select = new Select(selectElement);
             select.selectByValue("yes");
 
             WebElement button = driver.findElement(By.id("submit-btn"));
-            actions.moveToElement(button).click().perform();
+            actions.moveToElement(button).perform();
+            button.click();
 
             Alert alert = driver.switchTo().alert();
 
@@ -63,7 +65,7 @@ public class QatoriumTest {
             slider.click();
 
             Actions actions = new Actions(driver);
-            actions.clickAndHold(slider).moveByOffset(50, 0).release().build().perform();
+            actions.clickAndHold(slider).moveByOffset(50, 0).release().perform();
 
             Assert.assertEquals(driver.findElement(By.id("value")).getText(), "55");
         } finally {
