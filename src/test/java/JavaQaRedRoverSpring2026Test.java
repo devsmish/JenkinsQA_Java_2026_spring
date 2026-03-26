@@ -113,4 +113,26 @@ public class JavaQaRedRoverSpring2026Test {
 
         driver.quit();
     }
+
+
+    @Test
+    public void testIlyaAlekseev() {
+        WebDriver driver = new ChromeDriver();
+
+        try {
+            driver.get("https://practice.expandtesting.com/");
+            driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
+
+            driver.findElement(By.xpath("//*[@id='search-input']")).sendKeys("Selenium");
+            driver.findElement(By.xpath("//*[@id='search-button']")).click();
+
+            WebElement message = driver.findElement(By.xpath("//*[text() = 'Sample applications for " +
+                    "practice test automation']"));
+
+            Assert.assertEquals(message.getText(), "Sample applications for practice test automation");
+
+        } finally {
+            driver.quit();
+        }
+    }
 }
