@@ -344,4 +344,27 @@ public class NoGroupTest {
             driver.quit();
         }
     }
+
+    @Test
+    public void testQaPracticesDrawerItem() {
+
+        List<String> expectedItemsList = List.of("ISTQB Preparation", "Software Testing", "Agile & Scrum");
+        List<String> actualItemsList = new ArrayList<>();
+        WebDriver driver = new ChromeDriver();
+
+        try {
+            driver.get("https://toolsqa.com/");
+            driver.findElement(By.xpath("//*[@class='navbar__tutorial-menu']")).click();
+            driver.findElement(By.xpath("//*[@class='first-generation']/ul/*[contains(., 'QA Practices')]")).click();
+            List<WebElement> menuList = driver.findElements(By.xpath("//*[@class='second-generation']/ul/li/a"));
+
+            for (WebElement element : menuList) {
+                actualItemsList.add(element.getAttribute("title"));
+            }
+
+            Assert.assertTrue(expectedItemsList.containsAll(actualItemsList));
+        } finally {
+            driver.quit();
+        }
+    }
 }
