@@ -14,23 +14,15 @@ public class JavaQaRedRoverSpring2026Test {
     public void testVitaliyKonstantinov() {
         WebDriver driver = new ChromeDriver();
 
-        try {
-            driver.get("https://www.selenium.dev/selenium/web/web-form.html");
+        driver.get("https://www.selenium.dev/selenium/web/web-form.html");
+        driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
 
-            driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
+        driver.findElement(By.name("my-text")).sendKeys("Selenium");;
+        driver.findElement(By.cssSelector("button")).click();
 
-            WebElement textBox = driver.findElement(By.name("my-text"));
-            WebElement submitButton = driver.findElement(By.cssSelector("button"));
+        Assert.assertEquals(driver.findElement(By.id("message")), "Received!");
 
-            textBox.sendKeys("Selenium");
-            submitButton.click();
-
-            WebElement message = driver.findElement(By.id("message"));
-
-            Assert.assertEquals(message.getText(), "Received!");
-        } finally {
-            driver.quit();
-        }
+        driver.quit();
     }
 
     @Test
