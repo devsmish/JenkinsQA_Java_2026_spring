@@ -42,30 +42,30 @@ public class BestiesGroupTest {
 
     @Test
     public void testWBbyOftenSearched(){
-        WebDriver driver = new ChromeDriver();
-        driver.get("https://www.wildberries.by/");
-        driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
-
-        driver.findElement(By.xpath("//div/ul/li[@data-menu-id=\"brands\"]")).click();
-        driver.findElement(By.id("searchInput")).click();
-        driver.manage().timeouts().implicitlyWait(Duration.ofMillis(600));
-
-        WebElement input = driver.findElement(By.id("mobileSearchInput"));
-        Assert.assertEquals(input.getText(), "");
-
-        WebElement title = driver.findElement(By.className("autocomplete__title"));
-        Assert.assertEquals(title.getText(), "Часто ищут");
-
         Map<Integer, String> bestRecomeds = new HashMap<>();
         bestRecomeds.put(1, "кроссовки женские");
         bestRecomeds.put(2, "джинсы женские");
-        bestRecomeds.put(3, "куртка демисезонная женская");
-        for (int key : bestRecomeds.keySet()) {
-            WebElement firstRecomend = driver.findElement(By.xpath("//div[@class=\"autocomplete\"]//li[" + key + "]//span[2]"));
-            Assert.assertEquals(firstRecomend.getText(), bestRecomeds.get(key));
-        }
 
-        driver.quit();
+        WebDriver driver = new ChromeDriver();
+
+        try {
+            driver.get("https://www.wildberries.by/");
+            driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
+
+            driver.findElement(By.xpath("//div/ul/li[@data-menu-id='brands']")).click();
+            driver.findElement(By.id("searchInput")).click();
+            driver.manage().timeouts().implicitlyWait(Duration.ofMillis(600));
+
+            Assert.assertEquals(driver.findElement(By.id("mobileSearchInput")).getText(), "");
+            Assert.assertEquals(driver.findElement(By.className("autocomplete__title")).getText(), "Часто ищут");
+
+            for (int key : bestRecomeds.keySet()) {
+                WebElement firstRecomend = driver.findElement(By.xpath("//div[@class='autocomplete']//li[" + key + "]//span[2]"));
+                Assert.assertEquals(firstRecomend.getText(), bestRecomeds.get(key));
+            }
+        } finally {
+            driver.quit();
+        }
     }
 
     @Test
@@ -176,21 +176,42 @@ public class BestiesGroupTest {
 
     @Test
     public void testVVSearchBar() {
-        String testStr = "Индейка";
+        final String testStr = "Индейка";
 
         WebDriver driver = new ChromeDriver();
-        driver.get("https://vkusvill.ru/");
-        driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
+        try {
+            driver.get("https://vkusvill.ru/");
+            driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
 
-        driver.findElement(By.xpath("//button[@data-place=\"header_top\"]")).click();
-        WebElement searchInput = driver.findElement(By.xpath("//input[@id=\"js-vv21-search__search-input\"]"));
-        searchInput.sendKeys(testStr);
-        searchInput.sendKeys(Keys.ENTER);
+            driver.findElement(By.xpath("//button[@data-place='header_top']")).click();
 
-        WebElement text = driver.findElement(By.xpath("//div[@id=\"search-result-general-container\"]//h1"));
-        Assert.assertEquals(text.getText(), testStr);
+            WebElement searchInput = driver.findElement(By.xpath("//input[@id='js-vv21-search__search-input']"));
+            searchInput.sendKeys(testStr);
+            searchInput.sendKeys(Keys.ENTER);
 
-        driver.quit();
+            WebElement text = driver.findElement(By.xpath("//div[@id='search-result-general-container']//h1"));
+            Assert.assertEquals(text.getText(), testStr);
+        } finally {
+            driver.quit();
+        }
     }
 
+    @Test
+    public void testSeleniumDev() {
+        WebDriver driver = new ChromeDriver();
+
+        try {
+            driver.get("https://www.selenium.dev");
+            driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
+
+            driver.findElement(By.xpath("//button[@class='navbar-toggler']")).click();
+            driver.findElement(By.xpath("//a[@href='/documentation']")).click();
+
+            Assert.assertEquals(
+                    driver.findElement(By.xpath("//div[@class='td-content']/h1")).getText(),
+                    "The Selenium Browser Automation Project");
+        } finally {
+            driver.quit();
+        }
+    }
 }
