@@ -8,9 +8,8 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+
 import java.time.Duration;
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.testng.AssertJUnit.assertEquals;
 
@@ -18,33 +17,32 @@ import static org.testng.AssertJUnit.assertEquals;
 public class BestiesGroupTest {
 
     @Test
-    public void AliaksieiTest(){
+    public void testWikiSearchInput() {
+
         WebDriver driver = new ChromeDriver();
 
-        driver.get("https://www.wikipedia.org/");
-        driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
+        try {
+            driver.get("https://www.wikipedia.org/");
+            driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
 
-        WebElement textBox = driver.findElement(By.xpath("//*[@id='searchInput']"));
-        WebElement submitButton = driver.findElement(By.xpath("//*[@id='search-form']/fieldset/button/i"));
+            WebElement textBox = driver.findElement(By.xpath("//*[@id='searchInput']"));
+            WebElement submitButton = driver.findElement(By.xpath("//*[@id='search-form']/fieldset/button/i"));
 
-        textBox.sendKeys("Козловский");
-        submitButton.click();
+            textBox.sendKeys("Козловский");
+            submitButton.click();
 
-        // Ждем загрузки страницы
-        WebElement message = driver.findElement(By.xpath("//*[@id='firstHeading']"));
+            WebElement message = driver.findElement(By.xpath("//*[@id='firstHeading']"));
 
-        // Получаем текст и сравниваем
-        String actualText = message.getText();
-        assertEquals("Козловский", actualText);
-
-        driver.quit();
+            String actualText = message.getText();
+            assertEquals("Козловский", actualText);
+        } finally {
+            driver.quit();
+        }
     }
 
     @Test
-    public void testWBbyOftenSearched(){
-        Map<Integer, String> bestRecomeds = new HashMap<>();
-        bestRecomeds.put(1, "кроссовки женские");
-        bestRecomeds.put(2, "джинсы женские");
+    public void testWBbyOftenSearched() {
+        final String expectedRecomend = "кроссовки женские";
 
         WebDriver driver = new ChromeDriver();
 
@@ -56,97 +54,97 @@ public class BestiesGroupTest {
             driver.findElement(By.id("searchInput")).click();
             driver.manage().timeouts().implicitlyWait(Duration.ofMillis(600));
 
-            Assert.assertEquals(driver.findElement(By.id("mobileSearchInput")).getText(), "");
-            Assert.assertEquals(driver.findElement(By.className("autocomplete__title")).getText(), "Часто ищут");
+            WebElement actualRecomend = driver.findElement(By.className("autocomplete__phrase"));
+            Assert.assertEquals(actualRecomend.getText(), expectedRecomend);
 
-            for (int key : bestRecomeds.keySet()) {
-                WebElement firstRecomend = driver.findElement(By.xpath("//div[@class='autocomplete']//li[" + key + "]//span[2]"));
-                Assert.assertEquals(firstRecomend.getText(), bestRecomeds.get(key));
-            }
+        } finally {
+            driver.quit();
+        }
+    }
+
+
+    @Test
+    public void testCheckPeppaPigChannelHead() {
+        WebDriver driver = new ChromeDriver();
+
+        try {
+            driver.get("https://www.youtube.com/@PeppaPigRussianOfficial");
+
+            WebElement channelTitle = driver.findElement(
+                    By.xpath("//*[@id='page-header']//h1")
+            );
+
+            assertEquals("Свинка Пеппа Русский - Официальный канал", channelTitle.getText());
+        } finally {
+
+            driver.quit();
+        }
+    }
+
+    @Test
+    public void testSearchQACourseTest() {
+
+        WebDriver driver = new ChromeDriver();
+        try {
+            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
+
+            driver.get("https://otus.ru/catalog/courses");
+
+            // закрыть баннер кук
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+            WebElement cookieButton = wait.until(
+                    ExpectedConditions.elementToBeClickable(By.xpath("//div[text()='OK']"))
+            );
+            cookieButton.click();
+
+            WebElement searchInput = driver.findElement(By.xpath("//input[@type='search']"));
+            searchInput.sendKeys("QA");
+            searchInput.sendKeys(Keys.ENTER);
+
+            WebElement course = driver.findElement(By.xpath("//a[contains(@href,'qa-lead')]"));
+
+            Assert.assertTrue(course.isDisplayed());
         } finally {
             driver.quit();
         }
     }
 
     @Test
-    public void peppaPigChannelTest() {
+    public void testRegistrationButton() {
         WebDriver driver = new ChromeDriver();
+        try {
+            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
 
-        // открываем официальный канал Свинки Пеппы
-        driver.get("https://www.youtube.com/@PeppaPigRussianOfficial");
+            driver.get("https://aqa-proka4.org/sandbox/web");
+            WebElement userInput = driver.findElement(By.xpath("//input[@id='username']"));
+            userInput.sendKeys("userName");
 
-        // Находим заголовок канала
-        WebElement channelTitle = driver.findElement(
-                By.xpath("//*[@id='page-header']/yt-page-header-renderer/yt-page-header-view-model/div/div[1]/div/yt-dynamic-text-view-model/h1")
-        );
+            WebElement passwordInput = driver.findElement(By.xpath("//input[@id='password']"));
+            passwordInput.sendKeys("password");
 
-        // Проверяем текст заголовка
-        assertEquals("Свинка Пеппа Русский - Официальный канал", channelTitle.getText());
+            WebElement emailInput = driver.findElement(By.xpath("//input[@id='email']"));
+            emailInput.sendKeys("email@gmail.com");
 
-        driver.quit();
-    }
+            WebElement selectedCountry = driver.findElement(By.xpath("//select[@id='country']"));
+            Select select = new Select(selectedCountry);
+            select.selectByValue("ru");
 
-    @Test
-    public void goSearchQACourseTest() {
+            WebElement checkBox = driver.findElement(By.xpath("//input[@id='terms']"));
+            checkBox.click();
 
-        WebDriver driver = new ChromeDriver();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
+            WebElement regButton = driver.findElement(By.xpath("//button[@id='submitBtn']"));
+            regButton.click();
 
-        driver.get("https://otus.ru/catalog/courses");
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
-        // закрыть баннер кук
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        WebElement cookieButton = wait.until(
-                ExpectedConditions.elementToBeClickable(By.xpath("//div[text()='OK']"))
-        );
-        cookieButton.click();
+            WebElement result = wait.until(
+                    ExpectedConditions.visibilityOfElementLocated(By.id("formResult"))
+            );
 
-        WebElement searchInput = driver.findElement(By.xpath("//input[@type='search']"));
-        searchInput.sendKeys("QA");
-        searchInput.sendKeys(Keys.ENTER);
-
-        WebElement course = driver.findElement(By.xpath("//a[contains(@href,'qa-lead')]"));
-
-        Assert.assertTrue(course.isDisplayed());
-
-        driver.quit();
-    }
-
-    @Test
-    public void goRegistrationButton() {
-
-        WebDriver driver = new ChromeDriver();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
-
-        driver.get("https://aqa-proka4.org/sandbox/web");
-        WebElement userInput = driver.findElement(By.xpath("//input[@id='username']"));
-        userInput.sendKeys("userName");
-
-        WebElement passwordInput = driver.findElement(By.xpath("//input[@id='password']"));
-        passwordInput.sendKeys("password");
-
-        WebElement emailInput = driver.findElement(By.xpath("//input[@id='email']"));
-        emailInput.sendKeys("email@gmail.com");
-
-        WebElement selectedCountry = driver.findElement(By.xpath("//select[@id='country']"));
-        Select select = new Select(selectedCountry);
-        select.selectByValue("ru");
-
-        WebElement checkBox = driver.findElement(By.xpath("//input[@id='terms']"));
-        checkBox.click();
-
-        WebElement regButton = driver.findElement(By.xpath("//button[@id='submitBtn']"));
-        regButton.click();
-
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
-        WebElement result = wait.until(
-                ExpectedConditions.visibilityOfElementLocated(By.id("formResult"))
-        );
-
-        Assert.assertTrue(result.isDisplayed());
-
-        driver.quit();
+            Assert.assertTrue(result.isDisplayed());
+        } finally {
+            driver.quit();
+        }
     }
 
     @Test

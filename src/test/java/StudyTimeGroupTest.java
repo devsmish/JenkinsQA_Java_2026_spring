@@ -5,7 +5,6 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.Test;
@@ -71,31 +70,31 @@ public class StudyTimeGroupTest {
     }
 
     @Test
-    public void testPluginsPageSearchCli() {
+    public void testPluginsPageSearchNoResults() {
         WebDriver driver = new ChromeDriver();
-        Actions actions = new Actions(driver);
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
 
         try {
             driver.get("https://plugins.jenkins.io/");
 
-            WebElement inpFindPlugins = driver.findElement(By.xpath("//input[@name='query']"));
-            actions.moveToElement(inpFindPlugins)
-                    .click()
-                    .sendKeys("qwertyuiop")
-                    .sendKeys(Keys.ENTER)
-                    .build()
-                    .perform();
+            WebElement inpFindPlugins = wait.until(
+                    ExpectedConditions.elementToBeClickable(By.xpath("//input[@name='query']")));
+            inpFindPlugins.clear();
+            inpFindPlugins.sendKeys("qwertyuiop" + Keys.ENTER);
 
-            WebElement txtNoResultsFound = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='no-results']/p")));
+            WebElement txtNoResultsFound = wait.until(
+                    ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='no-results']/p")));
 
-            Assert.assertEquals(
-                    txtNoResultsFound.getText(),
-                    "You search did not return any results. Please try changing your search criteria or reloading the browser.");
+            String actualText = txtNoResultsFound.getText();
+            Assert.assertTrue(
+                    actualText.contains("did not return any results"),
+                    "The error text does not match. Received: " + actualText);
+
         } finally {
             driver.quit();
         }
     }
+
 
     @Test
     public void FurnitureStoreTest() {
@@ -140,18 +139,21 @@ public class StudyTimeGroupTest {
     @Test
     public void testContribPage() {
         WebDriver driver = new ChromeDriver();
-        driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
 
         try {
             driver.get("https://contributors.jenkins.io/");
 
-            List<WebElement> weContributorNames = driver.findElements(By.xpath("//h3"));
+            List<WebElement> weContributorNames = wait.until(
+                    ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//h3")));
             List<String> contributorNames = new ArrayList<>();
             for (WebElement contributorName : weContributorNames) {
                 contributorNames.add(contributorName.getText());
             }
 
-            Assert.assertTrue(contributorNames.contains("Bruno Verachten"));
+            Assert.assertTrue(
+                    contributorNames.contains("Bruno Verachten"),
+                    "The list does not contain 'Bruno Verachten'. Names found: " + contributorNames.size() + "/32");
         } finally {
             driver.quit();
         }

@@ -2,6 +2,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -363,6 +364,87 @@ public class NoGroupTest {
             }
 
             Assert.assertTrue(expectedItemsList.containsAll(actualItemsList));
+        } finally {
+            driver.quit();
+        }
+    }
+    @Test
+    public void testFirst() {
+
+        WebDriver driver = new ChromeDriver();
+        try{
+        driver.get("https://www.selenium.dev/selenium/web/web-form.html");
+
+        driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
+
+        driver.findElement(By.cssSelector("button")).click();
+
+        WebElement message = driver.findElement(By.id("message"));
+
+        Assert.assertEquals(message.getText(), "Received!");
+        }finally {
+        driver.quit();
+        }
+    }
+
+    @Test
+    public void testSecond() {
+
+        WebDriver driver = new ChromeDriver();
+        try{
+        driver.get("https://www.selenium.dev/selenium/web/web-form.html");
+
+        driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
+
+        WebElement mainTitle = driver.findElement(By.xpath("//h1[@class='display-6']"));
+
+        Assert.assertEquals(mainTitle.getText(),"Web form");
+        }finally {
+            driver.quit();
+        }
+    }
+
+    @Test
+    public void testLoadingPikabu() {
+        WebDriver driver = new ChromeDriver();
+        try {
+            driver.get("https://pikabu.ru/");
+            WebElement text = driver.findElement(By.xpath("//form[@id='signin-form']//button[@type='submit']"));
+
+            Assert.assertEquals(text.getText(), "Войти", "Not found");
+        } finally {
+            driver.quit();
+        }
+    }
+
+    @Test
+    public void testTransitionbest() {
+        WebDriver driver = new ChromeDriver();
+        try {
+            driver.get("https://pikabu.ru/");
+
+            driver.findElement(By.cssSelector("a[href='/best']")).click();
+
+            WebElement textButton = driver.findElement(By.cssSelector("a[href='/best']"));
+            String textColor = textButton.getCssValue("color");
+            Color color = Color.fromString(textColor);
+
+            Assert.assertEquals(color.asHex(), "#67993d", "Not found");
+        } finally {
+            driver.quit();
+        }
+    }
+
+    @Test
+    public void testRequiredfield() {
+        WebDriver driver = new ChromeDriver();
+        try {
+            driver.get("https://pikabu.ru/");
+
+            driver.findElement(By.cssSelector("form[id='signin-form'] button[type='submit']")).click();
+
+            WebElement popup = driver.findElement(By.cssSelector(".popup__hint"));
+            Assert.assertEquals(popup.getText(), "Обязательное поле", "Not found");
         } finally {
             driver.quit();
         }

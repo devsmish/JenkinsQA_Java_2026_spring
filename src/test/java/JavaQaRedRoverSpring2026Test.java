@@ -14,43 +14,42 @@ public class JavaQaRedRoverSpring2026Test {
     public void testVitaliyKonstantinov() {
         WebDriver driver = new ChromeDriver();
 
-        driver.get("https://www.selenium.dev/selenium/web/web-form.html");
-        driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
+        try {
+            driver.get("https://www.selenium.dev/selenium/web/web-form.html");
+            driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
 
-        driver.findElement(By.name("my-text")).sendKeys("Selenium");;
-        driver.findElement(By.cssSelector("button")).click();
+            driver.findElement(By.name("my-text")).sendKeys("Selenium");
+            driver.findElement(By.cssSelector("button")).click();
 
-        String actualMessage = driver.findElement(By.id("message")).getText();
-
-        Assert.assertEquals(actualMessage, "Received!");
-
-        driver.quit();
+            String actualMessage = driver.findElement(By.id("message")).getText();
+            Assert.assertEquals(actualMessage, "Received!");
+        } finally {
+            driver.quit();
+        }
     }
 
     @Test
     public void testAnnaKuryleva() {
-
         WebDriver driver = new ChromeDriver();
-        driver.get("https://www.mveu.ru");
-        driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
+        try {
+            driver.get("https://www.mveu.ru");
+            driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
 
-        WebElement textBox = driver.findElement(By.xpath("//input[@placeholder='ФИО*']"));
-        String expectedText = "Иванов Иван Иванович";
-        textBox.sendKeys(expectedText);
+            WebElement textBox = driver.findElement(By.xpath("//input[@placeholder='ФИО*']"));
+            String expectedText = "Иванов Иван Иванович";
+            textBox.sendKeys(expectedText);
 
-        WebElement button = driver.findElement(By.xpath("//button[contains(@class, 'form_button')]"));
+            WebElement button = driver.findElement(By.xpath("//button[contains(@class, 'form_button')]"));
 
-        new Actions(driver).scrollToElement(button).perform();
-        button.click();
+            new Actions(driver).scrollToElement(button).perform();
+            button.click();
 
-        WebElement errorButton = driver.findElement(By.xpath("//div[@data-notivue='error']"));
+            WebElement errorButton = driver.findElement(By.xpath("//div[@data-notivue='error']"));
 
-        String actualErrorMessage = errorButton.getText();
-        String expectedErrorMessage = "Проверьте все поля";
-
-        Assert.assertEquals(actualErrorMessage, expectedErrorMessage);
-
-        driver.quit();
+            Assert.assertEquals(errorButton.getText(), "Проверьте все поля");
+        } finally {
+            driver.quit();
+        }
     }
 
     @Test

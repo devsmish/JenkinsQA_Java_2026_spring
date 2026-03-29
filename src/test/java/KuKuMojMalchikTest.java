@@ -14,15 +14,21 @@ public class KuKuMojMalchikTest {
 	@Test
 	public void testGismeteo() {
 		WebDriver driver = new ChromeDriver();
-		driver.get("https://www.gismeteo.ru/");
-		WebElement button = driver.findElement(By.xpath("/html/body/div[2]/div[2]/div[2]/div[2]/div[2]/button[1]/p"));
-		button.click();
+try {
+    driver.get("https://www.gismeteo.ru/");
+    driver.findElement(By.xpath("/html/body/div[2]/div[2]/div[2]/div[2]/div[2]/button[1]/p")).click();
 
-		WebElement nameCity = driver.findElement(By.xpath("//a[contains(text(), 'Москва')]"));
-		nameCity.click();
-		WebElement text = driver.findElement(By.xpath("//h1"));
-		Assert.assertEquals(text.getText(), "Погода в Москве");
-		driver.quit();
+    WebElement nameCity = driver.findElement(By.xpath("//a[contains(text(), 'Москва')]"));
+    nameCity.click();
+    WebElement text = driver.findElement(By.xpath("//h1"));
+    Assert.assertEquals(text.getText(), "Погода в Москве");
+}
+finally {
+    driver.quit();
+}
+
+
+
 
 	}
 
@@ -30,29 +36,34 @@ public class KuKuMojMalchikTest {
 	public void testEditaOrlovaOnliner() {
 		WebDriver driver = new ChromeDriver();
 
-		driver.get("https://www.onliner.by/");
-		WebElement button = driver.findElement(By.cssSelector(".auth-bar__item--text"));
-		driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
-		button.click();
+		try {
+			driver.get("https://www.onliner.by/");
+			WebElement button = driver.findElement(By.cssSelector(".auth-bar__item--text"));
+			driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
+			button.click();
 
-		WebElement text = driver.findElement(By.cssSelector(".auth-form__title.auth-form__title_big.auth-form__title_condensed-default"));
-		Assert.assertEquals(text.getText(), "Вход");
-
-		driver.quit();
+			WebElement text = driver.findElement(By.cssSelector(".auth-form__title.auth-form__title_big.auth-form__title_condensed-default"));
+			Assert.assertEquals(text.getText(), "Вход");
+		} finally {
+			driver.quit();
+		}
 	}
 
 	@Test
-	public void TestEditaOrlovaOnlinerCart() {
+	public void testEditaOrlovaOnlinerCart() {
 		WebDriver driver = new ChromeDriver();
 
-		driver.get("https://www.onliner.by/");
-		WebElement button = driver.findElement(By.cssSelector("a[title='Корзина']"));
-		button.click();
+		try {
+			driver.get("https://www.onliner.by/");
+			WebElement button = driver.findElement(By.cssSelector("a[title='Корзина']"));
+			button.click();
 
-		WebElement title = driver.findElement(By.cssSelector("div.cart-form__title"));
+			WebElement title = driver.findElement(By.cssSelector("div.cart-form__title"));
 
-		Assert.assertEquals(title.getText(), "Корзина");
-		driver.quit();
+			Assert.assertEquals(title.getText(), "Корзина");
+		} finally {
+			driver.quit();
+		}
 	}
 
 	@Test
