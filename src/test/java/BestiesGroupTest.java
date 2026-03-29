@@ -9,8 +9,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import java.time.Duration;
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.testng.AssertJUnit.assertEquals;
 
@@ -18,26 +16,27 @@ import static org.testng.AssertJUnit.assertEquals;
 public class BestiesGroupTest {
 
     @Test
-    public void testWiSearch(){
+    public void testWikiSearchInput(){
+
         WebDriver driver = new ChromeDriver();
 
-        driver.get("https://www.wikipedia.org/");
-        driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
+        try {
+            driver.get("https://www.wikipedia.org/");
+            driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
 
-        WebElement textBox = driver.findElement(By.xpath("//*[@id='searchInput']"));
-        WebElement submitButton = driver.findElement(By.xpath("//*[@id='search-form']/fieldset/button/i"));
+            WebElement textBox = driver.findElement(By.xpath("//*[@id='searchInput']"));
+            WebElement submitButton = driver.findElement(By.xpath("//*[@id='search-form']/fieldset/button/i"));
 
-        textBox.sendKeys("Козловский");
-        submitButton.click();
+            textBox.sendKeys("Козловский");
+            submitButton.click();
 
-        // Ждем загрузки страницы
-        WebElement message = driver.findElement(By.xpath("//*[@id='firstHeading']"));
+            WebElement message = driver.findElement(By.xpath("//*[@id='firstHeading']"));
 
-        // Получаем текст и сравниваем
-        String actualText = message.getText();
-        assertEquals("Козловский", actualText);
-
-        driver.quit();
+            String actualText = message.getText();
+            assertEquals("Козловский", actualText);
+        } finally {
+            driver.quit();
+        }
     }
 
     @Test
@@ -61,6 +60,7 @@ public class BestiesGroupTest {
             driver.quit();
         }
     }
+
 
     @Test
     public void peppaPigChannelTest() {
