@@ -9,29 +9,28 @@ import java.time.Duration;
 
 public class ArtAeroTest {
     @Test
-    public void sasflixTest(){
+    public void sasflixTest() {
 
         WebDriver driver = new ChromeDriver();
-        driver.get("https://sasflix.ru/");
 
-        driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
+        try {
+            driver.get("https://sasflix.ru/");
 
-        WebElement searchBox = driver.findElement(By.xpath("//a[@href=\"/chat\"]"));
-        searchBox.click();
+            driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
 
-        WebElement searchButton = driver.findElement(By.xpath("//div[@class=\"mt-3\"]/button[@class=\"btn btn-md btn-primary\" and @type=\"button\"]"));
-        searchButton.click();
+            WebElement searchBox = driver.findElement(By.xpath("//a[@href='/chat']"));
+            searchBox.click();
 
-        driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
+            WebElement searchButton = driver.findElement(By.xpath("//div[@class='mt-3']/button[@class='btn btn-md btn-primary' and @type='button']"));
+            searchButton.click();
 
-        WebElement buttonLoginn = driver.findElement(By.xpath("//*[@id=\"BootstrapVueNext__ID__v-22__tab___\"]"));
-        buttonLoginn.click();
+            WebElement buttonLogin = driver.findElement(By.xpath("//*[@id='BootstrapVueNext__ID__v-22__tab___']"));
+            buttonLogin.click();
 
-        Assert.assertEquals(buttonLoginn.getText(), "Регистрация");
+            Assert.assertEquals(buttonLogin.getText(), "Регистрация");
 
-        driver.quit();
-
-
-
+        } finally {
+            driver.quit();
+        }
     }
 }
