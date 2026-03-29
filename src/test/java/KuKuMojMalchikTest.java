@@ -14,7 +14,7 @@ public class KuKuMojMalchikTest {
 	@Test
 	public void testGismeteo() {
 		WebDriver driver = new ChromeDriver();
-        try {
+
 		driver.get("https://www.gismeteo.ru/");
 		WebElement button = driver.findElement(By.xpath("/html/body/div[2]/div[2]/div[2]/div[2]/div[2]/button[1]/p"));
 		button.click();
@@ -23,10 +23,10 @@ public class KuKuMojMalchikTest {
 		nameCity.click();
 		WebElement text = driver.findElement(By.xpath("//h1"));
 		Assert.assertEquals(text.getText(), "Погода в Москве");
-        }
-        finally {
+
+
             driver.quit();
-        }
+
 
 	}
 
