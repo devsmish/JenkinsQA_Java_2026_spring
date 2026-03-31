@@ -3,6 +3,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.SearchContext;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -12,9 +13,7 @@ import org.testng.annotations.Test;
 import org.testng.Assert;
 
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.logging.Logger;
 
 @Ignore
@@ -139,6 +138,62 @@ public class StudyTimeGroupTest {
             WebElement searchResultCount = driver.findElement(By.xpath("//div[@class='nav-link SearchResultsCount']"));
 
             Assert.assertEquals(searchResultCount.getText(), "51 to 100 of 133");
+
+        } finally {
+            driver.quit();
+        }
+    }
+
+    @Test
+    public void testPluginsPageSearchRuby() {
+        WebDriver driver = new ChromeDriver();
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+        try {
+            driver.get("https://plugins.jenkins.io/");
+
+            ((JavascriptExecutor) driver).executeScript(
+                    "arguments[0].click();", wait.until(ExpectedConditions.elementToBeClickable(
+                            By.xpath("//button[@class='btn btn-primary' and text()='Browse']")))
+            );
+
+            wait.until(ExpectedConditions. elementToBeClickable(By.xpath("//input[@value='ruby']"))).click();
+
+            List<WebElement> searchResults = null;
+            int attempts = 0;
+
+            while (attempts < 2) {
+                try {
+                    searchResults = wait.until(
+                            ExpectedConditions.visibilityOfAllElementsLocatedBy(
+                                    By.xpath("//div[@class='SearchResults--ItemBox']"))
+                    );
+
+                    if (!searchResults.isEmpty()) break;
+
+                } catch (StaleElementReferenceException e) {
+                    attempts++;
+                }
+            }
+
+            if (searchResults == null) {
+                throw new RuntimeException("Failed to load search results after 3 attempts.\n");
+            }
+
+            Map<String, String> actualResults = new HashMap<>();
+
+            for (WebElement item : searchResults) {
+                String title = item.findElement(By.className("Plugin--TitleContainer")).getText();
+                String text = item.findElement(By.className("Plugin--ExcerptContainer")).getText();
+                actualResults.put(title, text);
+            }
+
+            Map<String, String> expectedResults = Map.of(
+                    "Rake", "The Rake plugin allows to execute rake task from Jenkins.",
+                    "RubyMetrics", "This plugin integrates a bunch of ruby coverage tools (Rcov, Saikuro, Rails stats...) to Jenkins. Currently it just supports Rcov reports."
+            );
+
+            Assert.assertEquals(expectedResults, actualResults);
 
         } finally {
             driver.quit();
