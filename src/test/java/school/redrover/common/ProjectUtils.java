@@ -50,7 +50,7 @@ public final class ProjectUtils {
     }
 
     private static String convertPropToEnvName(String propName) {
-        return propName.replace('.', '_').toUpperCase();
+        return propName.replace('.', '_').replace('-', '_').toUpperCase();
     }
 
     private static String getValue(String name) {
