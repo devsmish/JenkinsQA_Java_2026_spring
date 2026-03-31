@@ -33,10 +33,10 @@ jobs:
 
 # tar -cvf jenkins_backup.tar ./jenkins_backup
 # split -b 95m -d jenkins_backup.tar jenkins_backup
+# git submodule update --init --recursive
 
       - name: Get Jenkins data
         run: |
-# git submodule update --init --recursive
           git submodule update --remote _jenkins_data
 
       - name: Prepare Jenkins data
