@@ -24,10 +24,11 @@ public class ChangeThemeTest extends BaseTest {
         getDriver().findElement
                 (By.xpath("//button[@class='jenkins-button jenkins-submit-button jenkins-button--primary ']")).click();
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+        String theme = ((JavascriptExecutor) getDriver())
+                .executeScript("return document.documentElement.getAttribute('data-theme')")
+                .toString();
 
-        Assert.assertEquals("dark",
-               ((JavascriptExecutor) getDriver()).executeScript("return document.documentElement.getAttribute('data-theme')")
-      );
+        Assert.assertEquals("dark", theme);
+
     }
 }
