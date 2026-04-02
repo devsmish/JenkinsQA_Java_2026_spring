@@ -28,7 +28,7 @@ public class ChangeThemeTest extends BaseTest {
         getDriver().findElement(By.xpath("//label[@for='radio-block-0']")).click();
 
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
-        wait.until(ExpectedConditions.visibilityOfElementLocated(
+        wait.until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//button[@class='jenkins-button apply-button']"))).click();
     }
 }
