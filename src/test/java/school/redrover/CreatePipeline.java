@@ -25,7 +25,6 @@ public class CreatePipeline extends BaseTest {
 
         getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
 
-
         Assert.assertEquals(
                 getDriver().findElement(By.xpath("//h2[@class='permalinks-header']")).getText(),
                 "Permalinks");
