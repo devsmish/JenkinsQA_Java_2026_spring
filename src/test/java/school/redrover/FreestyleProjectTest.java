@@ -27,4 +27,39 @@ public class FreestyleProjectTest extends BaseTest {
                 By.xpath("//*[@class='jenkins-table__link model-link inside']")).getText(),
                 testProjectName);
     }
+
+    @Test
+    public void testDisableFreestyleProject() {
+
+        getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
+        getDriver().findElement(By.id("name")).sendKeys("FreestyleProject");
+        getDriver().findElement(By.xpath("//li[@class='hudson_model_FreeStyleProject']")).click();
+        getDriver().findElement(By.id("ok-button")).click();
+        getDriver().findElement(By.xpath("//label[@class='jenkins-toggle-switch__label ']")).click();
+        getDriver().findElement(By.name("Submit")).click();
+
+        Assert.assertTrue(getDriver().findElement(
+                By.id("enable-project")).getText().contains("This project is currently disabled"));
+    }
+
+    @Test
+    public void testEnableFreestyleProject() {
+
+        getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
+        getDriver().findElement(By.id("name")).sendKeys("FreestyleProject");
+        getDriver().findElement(By.xpath("//li[@class='hudson_model_FreeStyleProject']")).click();
+        getDriver().findElement(By.id("ok-button")).click();
+        getDriver().findElement(By.xpath("//label[@class='jenkins-toggle-switch__label ']")).click();
+        getDriver().findElement(By.name("Submit")).click();
+        getDriver().findElement(By.xpath("//button[@value='Enable']")).click();
+
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[@href='/job/FreestyleProject/configure']"))).click();
+
+        Assert.assertEquals(getDriver().findElement(
+                By.className("jenkins-toggle-switch__label__checked-title")).getText(),
+                "Enabled");
+    }
 }
