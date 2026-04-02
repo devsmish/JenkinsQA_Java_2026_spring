@@ -25,5 +25,9 @@ public class ChangeThemeTest extends BaseTest {
                 ((JavascriptExecutor) getDriver()).executeScript("return document.documentElement.getAttribute('data-theme')")
         );
 
+        getDriver().findElement(By.xpath("//label[@for='radio-block-0']")).click();
+        getDriver().findElement
+                (By.xpath("//button[@class='jenkins-button apply-button']")).click();
+
     }
 }
