@@ -21,7 +21,6 @@ public class DescriptionTest extends BaseTest{
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(3));
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id='description-content']")));
 
-
         Assert.assertEquals(getDriver().findElement(By.xpath("//*[@id='description-content']")).getText(),text);
     }
 }
