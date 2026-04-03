@@ -1,6 +1,9 @@
 package school.redrover.common;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -10,12 +13,16 @@ public class DescriptionTest extends BaseTest{
 
     @Test
     public void testDescription () {
+        String text = "hi";
+
         getDriver().findElement(By.id("description-link")).click();
-        getDriver().findElement(By.xpath("//*[@id='description-edit-form']/form/div[1]/div[1]/textarea")).sendKeys("hi");
-        getDriver().findElement(By.xpath("//*[@id='description-edit-form']/form/div[2]/button[1]")).click();
+        getDriver().findElement(By.xpath("//textarea[@name='description']")).sendKeys(text);
+        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
 
-        getDriver().manage().timeouts().implicitlyWait(Duration.ofMillis(1000));
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(3));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id='description-content']")));
 
-        Assert.assertEquals(getDriver().findElement(By.xpath("//*[@id='description-content']")).getText(),"hi");
+
+        Assert.assertEquals(getDriver().findElement(By.xpath("//*[@id='description-content']")).getText(),text);
     }
 }
