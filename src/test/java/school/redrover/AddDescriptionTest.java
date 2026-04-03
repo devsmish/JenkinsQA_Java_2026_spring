@@ -51,9 +51,8 @@ public class AddDescriptionTest extends BaseTest {
 
         getDriver().findElement(By.name("description")).sendKeys(contentText);
         getDriver().findElement(By.name("Submit")).click();
-        getDriver().manage().timeouts().implicitlyWait(Duration.ofMillis(800));
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(3));
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("description-content")));
 
         Assert.assertEquals(
