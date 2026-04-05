@@ -159,13 +159,29 @@ public final class JenkinsUtils {
     }
 
     private static void resetTheme() {
-        String url = ProjectUtils.getUrl() + "user/" + ProjectUtils.getUserName() + "/appearance/configSubmit";
-        String jsonPayload = "{\"userProperty0\":{\"theme\":{\"value\":\"0\",\"stapler-class\":\"io.jenkins.plugins.thememanager.none.NoOpThemeManagerFactory\",\"$class\":\"io.jenkins.plugins.thememanager.none.NoOpThemeManagerFactory\"}}}";
+
+        String url = ProjectUtils.getUrl() + "manage/appearance/configSubmit";
+
+        String jsonPayload =
+                "{\"io-jenkins-plugins-thememanager-ThemeManagerPageDecorator\":{" +
+                        "\"theme\":{" +
+                        "\"value\":\"0\"," +
+                        "\"stapler-class\":\"io.jenkins.plugins.thememanager.none.NoOpThemeManagerFactory\"," +
+                        "\"$class\":\"io.jenkins.plugins.thememanager.none.NoOpThemeManagerFactory\"" +
+                        "}," +
+                        "\"disableUserThemes\":false" +
+                        "}}";
+
         String encodedJson = URLEncoder.encode(jsonPayload, StandardCharsets.UTF_8);
-        String body = String.format("Jenkins-Crumb=%s&json=%s&Submit=Submit&core:apply=true",
-                getCrumbFromPage(getPage("")),
-                encodedJson);
-        postHttp(url, body);
+
+        String crumb = getCrumb();
+
+        String body = String.format(
+                "json=%s&Submit=Save",
+                encodedJson
+        );
+
+        postHttp(url, body, crumb);
     }
 
     private static void deleteJobs() {
