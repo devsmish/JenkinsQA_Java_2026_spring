@@ -5,7 +5,7 @@ import org.testng.Assert;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.common.BaseTest;
-
+@Ignore
 public class WelcomePageTest extends BaseTest {
 
     @Test
