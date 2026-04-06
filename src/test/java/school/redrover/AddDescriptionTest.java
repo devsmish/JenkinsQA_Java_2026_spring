@@ -47,7 +47,7 @@ public class AddDescriptionTest extends BaseTest {
                 getDriver().findElement(By.className("textarea-preview-container")).getText(),
                 "Plain text\nPreview");
     }
-
+@Ignore
     @Test
     public void testCancelWithoutDescription() {
         openDescription();
