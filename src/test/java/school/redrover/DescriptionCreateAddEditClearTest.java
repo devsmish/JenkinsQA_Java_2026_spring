@@ -10,13 +10,12 @@ import school.redrover.common.BaseTest;
 
 import java.time.Duration;
 
-public class DescriptionAddEditClearTest extends BaseTest {
-
-    private final String text = "My first project";
-    private final String text2 = "My first successful project";
-
+public class DescriptionCreateAddEditClearTest extends BaseTest {
     @Test
-    public void testAddDescription() {
+    public void testCreateAddEditClearDescription() {
+        final String text = "My first project";
+        final String text2 = "My first successful project";
+
         getDriver().findElement(By.xpath("//*[@id='tasks']/div[1]/span/a")).click();
         getDriver().findElement(By.id("name")).sendKeys("Freestyle");
         getDriver().findElement(By.className("org_jenkinsci_plugins_workflow_job_WorkflowJob")).click();
@@ -31,27 +30,29 @@ public class DescriptionAddEditClearTest extends BaseTest {
         Assert.assertEquals(getDriver().findElement(By.className("textarea-preview")).getText(), text);
 
         getDriver().findElement(By.name("Submit")).click();
-        Assert.assertEquals(getDriver().findElement(By.id("description-content")).getText(), text);
+
+        Assert.assertEquals(wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("description-content"))).
+                getText(), text);
 
         getDriver().findElement(By.id("description-link")).click();
         WebElement textArea = getDriver().findElement(By.name("description"));
         textArea.clear();
         textArea.sendKeys(text2);
-
         getDriver().findElement(By.className("textarea-show-preview")).click();
+
         Assert.assertEquals(getDriver().findElement(By.className("textarea-preview")).getText(), text2);
 
         getDriver().findElement(By.name("Submit")).click();
 
-        Assert.assertEquals(getDriver().findElement(By.id("description-content")).getText(), text2);
+        Assert.assertEquals(wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("description-content"))).
+                getText(), text2);
 
         getDriver().findElement(By.id("description-link")).click();
-        WebElement textArea2 = getDriver().findElement(By.name("description"));
-        textArea2.clear();
+        getDriver().findElement(By.name("description")).clear();
 
         getDriver().findElement(By.name("Submit")).click();
 
-        Assert.assertTrue(getDriver().findElement(By.id("description-content")).getText().isEmpty(),
-                "Описание не очистилось!");
+        boolean isEmpty = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("description-content"))).getText().isEmpty();
+        Assert.assertTrue(isEmpty, "Описание не очистилось!");
     }
 }
