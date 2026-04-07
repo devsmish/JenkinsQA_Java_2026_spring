@@ -13,34 +13,37 @@ public class UpdateProjectDescriptionTest extends BaseTest {
     @Test
     public void testUpdateProjectDescription() {
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(15));
+            WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(15));
 
-        String expectedDescription = "The goal of this project is to return Manchester United to its former glory";
+            String expectedDescription = "The most important of this project is to return Manchester United to its former glory";
 
-        getDriver().findElement(By.xpath("//span[text()='Create a job']")).click();
-        getDriver().findElement(By.xpath("//span[text()='Freestyle project']")).click();
-        getDriver().findElement(By.xpath("//input[@id='name']")).sendKeys("Make Manchester Utd great again");
-        getDriver().findElement(By.xpath("//button[@id='ok-button']")).click();
+            getDriver().findElement(By.xpath("//span[text()='Create a job']")).click();
+            getDriver().findElement(By.xpath("//span[text()='Freestyle project']")).click();
+            getDriver().findElement(By.id("name")).sendKeys("Best project");
+            getDriver().findElement(By.id("ok-button")).click();
 
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("description"))).
-                sendKeys("Fake description");
+            wait.until(ExpectedConditions.urlContains("configure"));
 
-        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
+            WebElement descriptionField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("description")));
+            descriptionField.sendKeys("Fake project description");
 
-        wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[@id='description-link']"))).click();
+            getDriver().findElement(By.name("Submit")).click();
 
-        WebElement descriptionField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("description")));
-        descriptionField.clear();
-        descriptionField.sendKeys(expectedDescription);
+            wait.until(ExpectedConditions.elementToBeClickable(By.id("description-link"))).click();
 
-        getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
+            WebElement updatedDescriptionField = wait.until(
+                    ExpectedConditions.visibilityOfElementLocated(By.name("description")));
+            updatedDescriptionField.clear();
+            updatedDescriptionField.sendKeys(expectedDescription);
 
-        //String newDescription = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='description-content']"))).getText();
+            getDriver().findElement(By.name("Submit")).click();
 
-        wait.until(ExpectedConditions.textToBePresentInElementLocated(By.id("description-content"), expectedDescription));
-        String newDescription = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("description-content"))).getText();
+            wait.until(ExpectedConditions.textToBePresentInElementLocated(
+                    By.id("description-content"), expectedDescription));
 
-        Assert.assertEquals(newDescription, expectedDescription);
+            String newDescription = getDriver().findElement(By.id("description-content")).getText();
+
+            Assert.assertEquals(newDescription, expectedDescription);
 
     }
 }
