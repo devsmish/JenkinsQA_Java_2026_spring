@@ -1,0 +1,28 @@
+package school.redrover;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
+import org.testng.annotations.Test;
+import school.redrover.common.BaseTest;
+
+import java.time.Duration;
+
+public class MultiConfigurationProjectTest extends BaseTest {
+
+    @Test
+
+    public void testMultiConfigurationProject () {
+
+        getDriver().findElement(By.xpath("//a[@it='hudson.model.Hudson@297db9bc']")).click();
+        getDriver().findElement(By.id("name")).sendKeys("test");
+        getDriver().findElement(By.xpath("//li[@class='hudson_matrix_MatrixProject']")).click();
+
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(3));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("ok-button")));
+
+        Assert.assertTrue(getDriver().findElement(By.id("ok-button")).isEnabled());
+    }
+
+}
