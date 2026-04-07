@@ -1,9 +1,13 @@
 package school.redrover;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.common.BaseTest;
+
+import java.time.Duration;
 
 public class FolderTest extends BaseTest {
 
@@ -13,6 +17,10 @@ public class FolderTest extends BaseTest {
         getDriver().findElement(By.xpath("//input[@name='name']")).sendKeys(folderName);
         getDriver().findElement(By.xpath("//span[text()='Folder']")).click();
         getDriver().findElement(By.id("ok-button")).click();
+
+        new WebDriverWait(getDriver(), Duration.ofSeconds(10))
+                .until(ExpectedConditions.presenceOfElementLocated(By.id("health-metrics")));
+
     }
     @Test
     public void testHealthMetricsAvailableOnFolderCreation() {
