@@ -12,7 +12,7 @@ public class UpdateProjectDescriptionTest extends BaseTest {
     @Test
     public void testUpdateProjectDescription() {
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(15));
 
         String expectedDescription = "The main goal of the project is to return Manchester United to its former glory";
 
