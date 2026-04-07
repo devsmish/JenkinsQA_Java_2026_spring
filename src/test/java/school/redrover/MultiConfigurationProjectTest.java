@@ -16,9 +16,9 @@ public class MultiConfigurationProjectTest extends BaseTest {
     public void testMultiConfigurationProject () {
 
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(3));
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[@it='hudson.model.Hudson@297db9bc']")));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id='tasks']/div[1]/span/a")));
 
-        getDriver().findElement(By.xpath("//a[@it='hudson.model.Hudson@297db9bc']")).click();
+        getDriver().findElement(By.xpath("//*[@id='tasks']/div[1]/span/a")).click();
         getDriver().findElement(By.id("name")).sendKeys("test");
         getDriver().findElement(By.xpath("//li[@class='hudson_matrix_MatrixProject']")).click();
 
