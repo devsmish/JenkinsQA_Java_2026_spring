@@ -5,28 +5,26 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.common.BaseTest;
 
 import java.time.Duration;
 
-@Ignore
 public class AddDescriptionTest extends BaseTest {
-    private final String contentText = "TEST";
-@Ignore
-    public void openDescription(){
+    private static final String TEXT_CONTENT = "TEST";
+
+    private void openDescription(){
         getDriver().findElement(By.cssSelector("#description-link.jenkins-button")).click();
     }
 
-    public void fillOutDescription(String description, boolean save){
+    private void fillOutDescription(String description, boolean save){
         getDriver().findElement(By.name("description")).sendKeys(description);
         if(save){
             getDriver().findElement(By.name("Submit")).click();
         }
     }
 
-    public void refillDescription(String newDescription, boolean save){
+    private void refillDescription(String newDescription, boolean save){
         WebElement descriptionField = getDriver().findElement(By.name("description"));
         descriptionField.clear();
         descriptionField.sendKeys(newDescription);
@@ -35,7 +33,8 @@ public class AddDescriptionTest extends BaseTest {
         }
     }
 
-    public void waitVisibility(int seconds, By locator){
+    //Зачистить, когда появятся вейтеры
+    private void waitVisibility(int seconds, By locator){
         new WebDriverWait(getDriver(), Duration.ofSeconds(seconds))
                 .until(ExpectedConditions.visibilityOfElementLocated(locator));
     }
@@ -48,7 +47,7 @@ public class AddDescriptionTest extends BaseTest {
                 getDriver().findElement(By.className("textarea-preview-container")).getText(),
                 "Plain text\nPreview");
     }
-@Ignore
+
     @Test
     public void testCancelWithoutDescription() {
         openDescription();
@@ -72,11 +71,10 @@ public class AddDescriptionTest extends BaseTest {
                 "Description has non-empty content!");
     }
 
-    @Ignore
     @Test
     public void testChangeAddDescriptionButtonTitle() {
         openDescription();
-        fillOutDescription(contentText, true);
+        fillOutDescription(TEXT_CONTENT, true);
         waitVisibility(10, By.cssSelector("#description-link.jenkins-button"));
 
         WebElement actualButton = getDriver().findElement(By.cssSelector("#description-link.jenkins-button"));
@@ -89,20 +87,20 @@ public class AddDescriptionTest extends BaseTest {
     @Test
     public void testAddDescription() {
         openDescription();
-        fillOutDescription(contentText, true);
+        fillOutDescription(TEXT_CONTENT, true);
         waitVisibility(10, By.cssSelector("#description-link.jenkins-button"));
 
         Assert.assertEquals(
                 getDriver().findElement(By.id("description-content")).getText(),
-                contentText);
+                TEXT_CONTENT);
     }
 
     @Test
     public void testChangeDescription() {
-        String changedDescription = contentText + "_changed";
+        String changedDescription = TEXT_CONTENT + "_changed";
 
         openDescription();
-        fillOutDescription(contentText, true);
+        fillOutDescription(TEXT_CONTENT, true);
         waitVisibility(10, By.id("description-link"));
 
         openDescription();
