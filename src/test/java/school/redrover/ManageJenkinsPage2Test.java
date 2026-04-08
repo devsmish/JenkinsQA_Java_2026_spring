@@ -9,17 +9,18 @@ import school.redrover.common.BaseTest;
 
 import java.time.Duration;
 import java.util.List;
+import org.openqa.selenium.JavascriptExecutor;
 
 
 public class ManageJenkinsPage2Test extends BaseTest {
 
-    private final By systemConfigurationName = By.xpath("//h2[@class='jenkins-section__title' and contains(text(), 'System Configuration')]");
-    private final By securityName = By.xpath("//h2[@class='jenkins-section__title' and contains(text(), 'Security')]");
-    private final By statusInformationName = By.xpath("//h2[@class='jenkins-section__title' and contains(text(),'Status Information')]");
-    private final By troubleshootingName = By.xpath("//h2[@class='jenkins-section__title' and contains(text(),'Troubleshooting')]");
-    private final By toolsAndActionsName = By.xpath("//h2[@class='jenkins-section__title' and contains(text(),'Tools and Actions')]");
-    private final By moduleActionBtn = By.xpath("//div[@class='jenkins-section__item']");
-    private final By pageByNameOpenedHeaderLocator = By.xpath(
+    private static final By SYSTEM_CONFIGURATION_NAME = By.xpath("//h2[@class='jenkins-section__title' and contains(text(), 'System Configuration')]");
+    private static final By SECURITY_NAME = By.xpath("//h2[@class='jenkins-section__title' and contains(text(), 'Security')]");
+    private static final By STATUS_INFORMATION_NAME = By.xpath("//h2[@class='jenkins-section__title' and contains(text(),'Status Information')]");
+    private static final By TROUBLESHOOTING_NAME = By.xpath("//h2[@class='jenkins-section__title' and contains(text(),'Troubleshooting')]");
+    private static final By TOOLS_AND_ACTIONS_NAME = By.xpath("//h2[@class='jenkins-section__title' and contains(text(),'Tools and Actions')]");
+    private static final By MODULE_ACTION_BTN = By.xpath("//div[@class='jenkins-section__item']");
+    private static final By PAGE_BY_NAME_OPENED_HEADER_LOCATOR = By.xpath(
             "//div[contains(@class,'jenkins-app-bar__content')] | " +
                     "//h1[contains(@class, 'jenkins-app-bar__title')] | " +
                     "//div[contains(@class, 'jenkins-breadcrumbs__list-item')] | " +
@@ -61,38 +62,41 @@ public class ManageJenkinsPage2Test extends BaseTest {
         getDriver().navigate().back();
     }
 
-    public void assertSubModulesName(String systemConfigName, String securityNameText,
+    private void  assertSubModulesName(String systemConfigName, String securityNameText,
                                      String statusInfoName, String troubleshootingNameText,
                                      String toolsActionsName) {
 
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
 
-        WebElement systemModule = getDriver().findElement(systemConfigurationName);
+        WebElement systemModule = getDriver().findElement(SYSTEM_CONFIGURATION_NAME);
         wait.until(ExpectedConditions.visibilityOf(systemModule));
         assert systemModule.getText().contains(systemConfigName);
 
-        WebElement securityModule = getDriver().findElement(securityName);
+        WebElement securityModule = getDriver().findElement(SECURITY_NAME);
         wait.until(ExpectedConditions.visibilityOf(securityModule));
         assert securityModule.getText().contains(securityNameText);
 
-        WebElement statusModule = getDriver().findElement(statusInformationName);
+        WebElement statusModule = getDriver().findElement(STATUS_INFORMATION_NAME);
         wait.until(ExpectedConditions.visibilityOf(statusModule));
         assert statusModule.getText().contains(statusInfoName);
 
-        WebElement troubleshootingModule = getDriver().findElement(troubleshootingName);
+        WebElement troubleshootingModule = getDriver().findElement(TROUBLESHOOTING_NAME);
         wait.until(ExpectedConditions.visibilityOf(troubleshootingModule));
         assert troubleshootingModule.getText().contains(troubleshootingNameText);
 
-        WebElement toolsModule = getDriver().findElement(toolsAndActionsName);
+        WebElement toolsModule = getDriver().findElement(TOOLS_AND_ACTIONS_NAME);
         wait.until(ExpectedConditions.visibilityOf(toolsModule));
         assert toolsModule.getText().contains(toolsActionsName);
     }
 
-    public void clickOnActionBtn(String actionNameBtn) {
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
-        List<WebElement> actionButtons = getDriver().findElements(moduleActionBtn);
+    private WebDriverWait getWait() {
+        return new WebDriverWait(getDriver(), Duration.ofSeconds(5));
+    }
+    private void  clickOnActionBtn(String actionNameBtn) {
+        WebDriverWait wait = getWait();
+        List<WebElement> actionButtons = getDriver().findElements(MODULE_ACTION_BTN);
 
-        wait.until(ExpectedConditions.presenceOfElementLocated(moduleActionBtn));
+        wait.until(ExpectedConditions.presenceOfElementLocated(MODULE_ACTION_BTN));
 
         for (WebElement btn : actionButtons) {
             if (btn.getText().contains(actionNameBtn)) {
@@ -102,8 +106,8 @@ public class ManageJenkinsPage2Test extends BaseTest {
         }
     }
 
-    public void verifyPageUrl(String actionNameBtn) {
-        ((org.openqa.selenium.JavascriptExecutor) getDriver()).executeScript("window.scrollTo(0, 0);");
+    private void  verifyPageUrl(String actionNameBtn) {
+        ((JavascriptExecutor) getDriver()).executeScript("window.scrollTo(0, 0);");
 
         String expectedUrl = switch (actionNameBtn) {
             case "System" -> "configure";
@@ -115,15 +119,15 @@ public class ManageJenkinsPage2Test extends BaseTest {
             default -> throw new IllegalArgumentException("Неизвестное действие: " + actionNameBtn);
         };
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
+        WebDriverWait wait = getWait();
         wait.until(ExpectedConditions.urlContains(expectedUrl));
     }
 
-    public void checkPageByNameOpened(String pageName) {
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
-        List<WebElement> headers = getDriver().findElements(pageByNameOpenedHeaderLocator);
+    private void  checkPageByNameOpened(String pageName) {
+        WebDriverWait wait = getWait();
+        List<WebElement> headers = getDriver().findElements(PAGE_BY_NAME_OPENED_HEADER_LOCATOR);
 
-        wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(pageByNameOpenedHeaderLocator));
+        wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(PAGE_BY_NAME_OPENED_HEADER_LOCATOR));
 
         for (WebElement header : headers) {
             if (header.getText().contains(pageName)) {
