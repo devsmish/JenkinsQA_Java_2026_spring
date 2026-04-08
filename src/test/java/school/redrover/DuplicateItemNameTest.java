@@ -21,6 +21,7 @@ public class DuplicateItemNameTest extends BaseTest {
     private final By dashboardLink = By.xpath("//a[@href='/']");
     private final By duplicateNameValidation = By.id("itemname-invalid");
 
+
     private void prepareNewPipelineJob(String jobName) {
         getDriver().findElement(newItemLink).click();
         getDriver().findElement(itemNameInput).sendKeys(jobName);
@@ -35,8 +36,9 @@ public class DuplicateItemNameTest extends BaseTest {
     }
 
     private void returnToStartPage() {
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(4));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(dashboardLink));
         getDriver().findElement(dashboardLink).click();
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(2));
         wait.until(ExpectedConditions.visibilityOfElementLocated(newItemLink));
     }
 
