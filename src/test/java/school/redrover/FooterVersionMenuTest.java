@@ -29,7 +29,7 @@ public class FooterVersionMenuTest extends BaseTest {
                 (By.xpath("//a[@class='jenkins-dropdown__item ']"));
 
         for (WebElement i : actualWebElements) {
-            actualElements.add(i.getText().trim());
+            actualElements.add(i.getText());
         }
 
         Assert.assertEquals(actualElements, exeptedElements);
