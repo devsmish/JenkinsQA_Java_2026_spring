@@ -20,6 +20,7 @@ public class DuplicateItemNameTest extends BaseTest {
     private final By submitButton = By.name("Submit");
     private final By dashboardLink = By.xpath("//a[@href='/']");
     private final By duplicateNameValidation = By.id("itemname-invalid");
+    private final By errorMessage = By.xpath("//div[@id='main-panel']/p");
 
 
     private void prepareNewPipelineJob(String jobName) {
@@ -28,7 +29,7 @@ public class DuplicateItemNameTest extends BaseTest {
         getDriver().findElement(pipelineType).click();
     }
 
-    private void saveNewPipelineJob() {
+    private void saveNewValidPipelineJob() {
         getDriver().findElement(okButton).click();
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(4));
         wait.until(ExpectedConditions.visibilityOfElementLocated(submitButton));
@@ -46,10 +47,14 @@ public class DuplicateItemNameTest extends BaseTest {
     public void testDuplicateNameItemCreationNotPossibleTest() {
 
         prepareNewPipelineJob(DUPLICATED_JOB_NAME);
-        saveNewPipelineJob();
+        saveNewValidPipelineJob();
         returnToStartPage();
         prepareNewPipelineJob(DUPLICATED_JOB_NAME);
 
         Assert.assertEquals(getDriver().findElement(duplicateNameValidation).getText(), "» A job already exists with the name ‘existing_job_01’");
+
+        getDriver().findElement(okButton).click();
+
+        Assert.assertEquals(getDriver().findElement(errorMessage).getText(), "A job already exists with the name ‘existing_job_01’");
     }
 }
