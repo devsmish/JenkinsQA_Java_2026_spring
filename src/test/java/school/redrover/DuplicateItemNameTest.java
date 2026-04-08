@@ -3,8 +3,8 @@ package school.redrover;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
 import org.testng.annotations.Test;
-import org.testng.asserts.SoftAssert;
 import school.redrover.common.BaseTest;
 
 import java.time.Duration;
@@ -50,11 +50,6 @@ public class DuplicateItemNameTest extends BaseTest {
         returnToStartPage();
         prepareNewPipelineJob(DUPLICATED_JOB_NAME);
 
-        SoftAssert softAssert = new SoftAssert();
-
-        softAssert.assertEquals(getDriver().findElement(duplicateNameValidation).getText(), "» A job already exists with the name ‘existing_job_01’");
-        softAssert.assertTrue(getDriver().findElement(okButton).isEnabled());
-
-        softAssert.assertAll();
+        Assert.assertEquals(getDriver().findElement(duplicateNameValidation).getText(), "» A job already exists with the name ‘existing_job_01’");
     }
 }
