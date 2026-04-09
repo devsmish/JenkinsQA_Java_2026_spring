@@ -11,7 +11,7 @@ import school.redrover.common.BaseTest;
 
 import java.time.Duration;
 
-public class FreestyleProjectConfigureSCM extends BaseTest {
+public class FreestylePrConfigureSCMTest extends BaseTest {
 
     @Test
     public void testRepositoryURL() {
