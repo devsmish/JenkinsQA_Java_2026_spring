@@ -12,13 +12,13 @@ import school.redrover.common.BaseTest;
 
 public class SingOut2Test extends BaseTest {
 
-        private boolean isAlertPresent(WebDriver driver) {
-            try {
-                driver.switchTo().alert();
-                return true;
-            } catch (NoAlertPresentException e) {
-                return false;
-            }
+    private boolean isAlertPresent(WebDriver driver) {
+        try {
+            driver.switchTo().alert();
+            return true;
+        } catch (NoAlertPresentException e) {
+            return false;
+        }
         }
 
         @Test
