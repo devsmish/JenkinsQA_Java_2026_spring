@@ -1,18 +1,25 @@
 package school.redrover;
 
 import org.openqa.selenium.By;
-
+import org.openqa.selenium.NoAlertPresentException;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.common.BaseTest;
 
-
-
 public class SingOut2Test extends BaseTest {
+
+    private boolean isAlertPresent(WebDriver driver) {
+        try {
+            driver.switchTo().alert();
+            return true;
+        } catch (NoAlertPresentException e) {
+            return false;
+        }
+    }
 
     @Test
     public void testSingOutIsImmediate() {
@@ -26,15 +33,8 @@ public class SingOut2Test extends BaseTest {
         );
         dropdownMenu.findElement(By.xpath(".//a[@href='/logout']")).click();
 
-        // Проверяем отсутствие alert
-        boolean isAlertPresent = false;
-        try {
-            getWait2().until(ExpectedConditions.alertIsPresent());
-            isAlertPresent = true;
-        } catch (Exception e) {
-            // ожидаемо — alert не появился
-        }
-        Assert.assertFalse(isAlertPresent, "Не должно быть alert-окна подтверждения выхода. Выход должен быть мгновенным.");
+        Assert.assertFalse(isAlertPresent(getDriver()),
+                "Не должно быть alert-окна подтверждения выхода. Выход должен быть мгновенным.");
 
         getWait5().until(ExpectedConditions.urlContains("login"));
     }
