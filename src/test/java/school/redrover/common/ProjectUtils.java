@@ -4,15 +4,10 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.Duration;
 import java.util.Properties;
-
-import static school.redrover.common.JenkinsUtils.generateApiToken;
 
 public final class ProjectUtils {
 
@@ -24,6 +19,8 @@ public final class ProjectUtils {
     private static final Properties properties;
 
     private static final ChromeOptions chromeOptions;
+
+    private static String cachedToken = null;
 
     static {
         properties = new Properties();
@@ -96,46 +93,15 @@ public final class ProjectUtils {
         return getValue(PREFIX_JENKINS_PROP + "password");
     }
 
-    private static String cachedToken = null;
-
-    public static String getApiToken() {
+    public static synchronized String getApiToken() {
         if (cachedToken != null) {
             return cachedToken;
         }
+        log("No API token found in cache. Generating a temporary token for the current session...");
 
-        String token = getValue(PREFIX_JENKINS_PROP + "api-token");
+        cachedToken = JenkinsUtils.generateApiToken();
 
-        if (token == null || token.isEmpty()) {
-            token = generateApiToken("Static_QA_Token");
-            saveTokenToProperties(token);
-        }
-
-        cachedToken = token;
-        return token;
-    }
-
-    private static void saveTokenToProperties(String token) {
-        String propPath = "src/test/resources/.properties";
-        Properties props = new Properties();
-        File file = new File(propPath);
-
-        try {
-            if (file.exists()) {
-                try (FileInputStream in = new FileInputStream(file)) {
-                    props.load(in);
-                }
-            }
-
-            props.setProperty(PREFIX_JENKINS_PROP + "api-token", token);
-
-            try (FileOutputStream out = new FileOutputStream(file)) {
-                props.store(out, "Updated via Automation");
-            }
-
-        } catch (IOException e) {
-            System.err.println("Mistake while saving token in file " + e.getMessage());
-            throw new RuntimeException(e);
-        }
+        return cachedToken;
     }
 
     public static void log(String message, Object... args) {

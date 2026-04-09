@@ -266,6 +266,15 @@ public final class JenkinsUtils {
         driver.get(ProjectUtils.getUrl() + "logout");
     }
 
+    // API Token Management
+    private static String getBasicAuth() {
+        String credentials = ProjectUtils.getUserName() + ":" + ProjectUtils.getPassword();
+
+        String encodedCredentials = Base64.getEncoder().encodeToString(credentials.getBytes(StandardCharsets.UTF_8));
+
+        return "Basic " + encodedCredentials;
+    }
+
     private static String getCrumbFieldFromJson(String json) {
         final String FIELD_TAG = "\"crumbRequestField\":\"";
         int start = json.indexOf(FIELD_TAG) + FIELD_TAG.length();
@@ -277,58 +286,70 @@ public final class JenkinsUtils {
         final String TOKEN_TAG = "\"tokenValue\":\"";
         int start = json.indexOf(TOKEN_TAG);
         if (start == -1) {
-            throw new RuntimeException("Token is not found in answer: " + json);
+            throw new RuntimeException("Token not found in response: " + json);
         }
         start += TOKEN_TAG.length();
         int end = json.indexOf("\"", start);
         return json.substring(start, end);
     }
 
-    static String generateApiToken(String tokenName) {
-        String user = ProjectUtils.getUserName();
-        String password = ProjectUtils.getPassword();
-        String jenkinsUrl = ProjectUtils.getUrl();
+    private static String[] fetchCrumb(String auth) {
+        try {
+            HttpRequest req = HttpRequest.newBuilder()
+                    .uri(URI.create(ProjectUtils.getUrl() + "crumbIssuer/api/json"))
+                    .header("Authorization", auth).GET().build();
+            String body = client.send(req, HttpResponse.BodyHandlers.ofString()).body();
+            return new String[]{getCrumbFieldFromJson(body), getCrumbFromJson(body)};
+        } catch (Exception e) {
+            throw new RuntimeException("Crumb error", e);
+        }
+    }
 
-        String authHeader = "Basic " + Base64.getEncoder().encodeToString((user + ":" + password).getBytes(StandardCharsets.UTF_8));
+    private static HttpResponse<String> sendPost(String url, String body, String auth, String cF, String cV) {
+        try {
+            HttpRequest req = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .header("Authorization", auth)
+                    .header(cF, cV)
+                    .header("Content-Type", "application/x-www-form-urlencoded")
+                    .POST(HttpRequest.BodyPublishers.ofString(body)).build();
+            return client.send(req, HttpResponse.BodyHandlers.ofString());
+        } catch (Exception e) {
+            throw new RuntimeException("POST error", e);
+        }
+    }
+
+    static String generateApiToken() {
+        final String auth = getBasicAuth();
+
+        String[] crumb = fetchCrumb(auth);
+
+        revokeAllTokens(auth, crumb[0], crumb[1]);
+
+        ProjectUtils.log("Generating a fresh API token...");
+
+        String url = ProjectUtils.getUrl() + "me/descriptorByName/jenkins.security.ApiTokenProperty/generateNewToken";
+        String body = "newTokenName=" + URLEncoder.encode("Automation_Dynamic_Token", StandardCharsets.UTF_8);
+
+        HttpResponse<String> res = sendPost(url, body, auth, crumb[0], crumb[1]);
+        return parseTokenFromJson(res.body());
+    }
+
+    private static void revokeAllTokens(String authHeader, String crumbField, String crumbValue) {
+        String url = ProjectUtils.getUrl() + "me/descriptorByName/jenkins.security.ApiTokenProperty/revokeAll";
 
         try {
-            HttpRequest crumbRequest = HttpRequest.newBuilder()
-                    .uri(URI.create(jenkinsUrl + "crumbIssuer/api/json"))
-                    .header("Authorization", authHeader)
-                    .GET()
-                    .build();
-
-            HttpResponse<String> crumbResponse = client.send(crumbRequest, HttpResponse.BodyHandlers.ofString());
-
-            if (crumbResponse.statusCode() != 200) {
-                throw new RuntimeException("Could not get Crumb. Answer: " + crumbResponse.body());
-            }
-
-            String crumbValue = getCrumbFromJson(crumbResponse.body());
-            String crumbField = getCrumbFieldFromJson(crumbResponse.body());
-
-            String apiUrl = jenkinsUrl + "me/descriptorByName/jenkins.security.ApiTokenProperty/generateNewToken";
-            String body = "newTokenName=" + tokenName;
-
-            HttpRequest postRequest = HttpRequest.newBuilder()
-                    .uri(URI.create(apiUrl))
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
                     .header("Authorization", authHeader)
                     .header(crumbField, crumbValue)
-                    .header("Content-Type", "application/x-www-form-urlencoded")
-                    .POST(HttpRequest.BodyPublishers.ofString(body))
+                    .POST(HttpRequest.BodyPublishers.noBody())
                     .build();
 
-            HttpResponse<String> response = client.send(postRequest, HttpResponse.BodyHandlers.ofString());
-
-            if (response.statusCode() != 200) {
-                throw new RuntimeException("Mistake Jenkins " + response.statusCode() + ": " + response.body());
-            }
-
-            return parseTokenFromJson(response.body());
-
+            client.send(request, HttpResponse.BodyHandlers.ofString());
+            ProjectUtils.log("All existing Jenkins tokens have been revoked.");
         } catch (Exception e) {
-            throw new RuntimeException("Critical mistake with API Jenkins", e);
+            ProjectUtils.log("Error during revokeAll: " + e.getMessage());
         }
     }
 }
-
