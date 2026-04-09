@@ -10,18 +10,20 @@ import school.redrover.common.JenkinsUtils;
 
 public class SingIn2Test extends BaseTest {
 
-    @Test
-    public void testSignInPageAlertMessageText() {
-        JenkinsUtils.logout(getDriver());
+        @Test
+        public void testSignInPageAlertMessageText() {
+            JenkinsUtils.logout(getDriver());
 
-        getDriver().findElement(By.cssSelector("#j_username")).sendKeys("user");
-        getDriver().findElement(By.cssSelector("#j_password")).sendKeys("qwerty");
-        getDriver().findElement(By.xpath("//button[text()='Sign in']")).click();
+            getDriver().findElement(By.cssSelector("#j_username")).sendKeys("user");
+            getDriver().findElement(By.cssSelector("#j_password")).sendKeys("qwerty");
+            getDriver().findElement(By.xpath("//button[text()='Sign in']")).click();
 
-        WebElement alertText = getWait5().until(
-                ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='app-sign-in-register__error']"))
-        );
+            WebElement alertText = getWait5().until(
+                    ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='app-sign-in-register__error']"))
+            );
 
-        Assert.assertEquals(alertText.getText(), "Invalid username or password");
+            Assert.assertEquals(alertText.getText(), "Invalid username or password");
+        }
     }
-}
+
+
