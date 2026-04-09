@@ -2,7 +2,7 @@
 name: Error Template
 about: Template for creating an error card.
 title: ER_XX.YYY.ZZ | TestName > What
-labels: Error
+labels: ER
 type: Task
 ---
 **ID**: ER_XX.YYY.ZZ | TestName > What
