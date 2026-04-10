@@ -93,22 +93,15 @@ public final class ProjectUtils {
         return getValue(PREFIX_JENKINS_PROP + "password");
     }
 
-    private static boolean isGenerating = false;
+    public static String getCachedToken() {
+        return cachedToken;
+    }
 
     public static String getApiToken() {
-        if (cachedToken != null) {
-            return cachedToken;
-        }
-
-        if (isGenerating) return null;
-
-        try {
-            isGenerating = true;
+        if (cachedToken == null) {
             cachedToken = JenkinsUtils.generateApiToken();
-            return cachedToken;
-        } finally {
-            isGenerating = false;
         }
+        return cachedToken;
     }
 
     public static void log(String message, Object... args) {

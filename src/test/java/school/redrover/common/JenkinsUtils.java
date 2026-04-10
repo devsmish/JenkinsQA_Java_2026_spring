@@ -23,8 +23,10 @@ public final class JenkinsUtils {
     }
 
     private static String getAuthHeader() {
-        String token = ProjectUtils.getApiToken();
+        String token = ProjectUtils.getCachedToken();
+
         String secret = (token != null) ? token : ProjectUtils.getPassword();
+
         return "Basic " + Base64.getEncoder().encodeToString(
                 (ProjectUtils.getUserName() + ":" + secret).getBytes(StandardCharsets.UTF_8));
     }
@@ -211,7 +213,6 @@ public final class JenkinsUtils {
     }
 
     static String generateApiToken() {
-        postHttp(ProjectUtils.getUrl() + "me/descriptorByName/jenkins.security.ApiTokenProperty/revokeAll", "");
         ProjectUtils.log("Generating a fresh API token...");
 
         String url = ProjectUtils.getUrl() + "me/descriptorByName/jenkins.security.ApiTokenProperty/generateNewToken";
@@ -219,5 +220,10 @@ public final class JenkinsUtils {
         HttpResponse<String> res = postHttp(url, body);
 
         return getSubstringsFromPage(res.body(), "\"tokenValue\":\"", "\"").iterator().next();
+    }
+
+    static void revokeTokens() {
+        ProjectUtils.log("Revoking all existing API tokens...");
+        postHttp(ProjectUtils.getUrl() + "me/descriptorByName/jenkins.security.ApiTokenProperty/revokeAll", "");
     }
 }
