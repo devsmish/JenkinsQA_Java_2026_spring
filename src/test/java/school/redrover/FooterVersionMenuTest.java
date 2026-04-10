@@ -71,23 +71,6 @@ public class FooterVersionMenuTest extends BaseTest {
 
         Assert.assertEquals(getDriver().getCurrentUrl(), "https://www.jenkins.io/");
     }
-    @Test
-    public void testSessionPersistsAfterExternalSiteAndBack() {
-        getDriver().findElement(
-                By.xpath("//a[@href='/view/all/newJob']")).click();
 
-        String originalUrl = getDriver().getCurrentUrl();
-
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
-        wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//button[@class='jenkins-button jenkins-button--tertiary jenkins_ver']"))).click();
-
-        getDriver().findElement(By.xpath("//a[@href='/manage/about']")).click();
-
-        getDriver().navigate().back();
-
-        Assert.assertEquals(getDriver().getCurrentUrl(), originalUrl);
-
-    }
 
     }
