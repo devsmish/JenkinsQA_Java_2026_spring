@@ -78,6 +78,7 @@ public class FooterVersionMenuTest extends BaseTest {
 
         String originalUrl = getDriver().getCurrentUrl();
 
+
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
