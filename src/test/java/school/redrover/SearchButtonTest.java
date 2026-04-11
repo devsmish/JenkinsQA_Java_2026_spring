@@ -1,6 +1,7 @@
 package school.redrover;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -50,5 +51,16 @@ public class SearchButtonTest extends BaseTest {
 
         Assert.assertEquals(getDriver()
                 .findElement(By.xpath("//h1[text()='Test Folder']")).getText(), FOLDER_NAME);
+    }
+
+    @Test
+    public void testEmptyQuery() {
+
+        getDriver().findElement(SEARCH_BUTTON).click();
+
+        getDriver().findElement(SEARCH_INPUT_FIELD).sendKeys(Keys.ENTER);
+
+        Assert.assertEquals(getDriver().getCurrentUrl(), "https://www.jenkins.io/doc/book/using/searchbox/");
+
     }
 }
