@@ -106,7 +106,13 @@ public final class JenkinsUtils {
     private static String getPage(String uri) {
         HttpResponse<String> page = getHttp(ProjectUtils.getUrl() + uri);
         if (page.statusCode() == 403) {
-            throw new RuntimeException(String.format("Authorization does not work with user: \"%s\". Current Secret: \"%s\"", ProjectUtils.getUserName(), ProjectUtils.getApiToken()));
+            String status = (ProjectUtils.getCachedToken() != null) ? "PRESENT" : "MISSING";
+
+            throw new RuntimeException(String.format(
+                    "403 Forbidden: User [%s], Token is [%s]",
+                    ProjectUtils.getUserName(), status
+            ));
+
         } else if (page.statusCode() != 200) {
             throw new RuntimeException("Something went wrong while clearing data");
         }
@@ -213,8 +219,6 @@ public final class JenkinsUtils {
     }
 
     static String generateApiToken() {
-        ProjectUtils.log("Generating a fresh API token...");
-
         String url = ProjectUtils.getUrl() + "me/descriptorByName/jenkins.security.ApiTokenProperty/generateNewToken";
         String body = "newTokenName=" + URLEncoder.encode("Automation_Dynamic_Token", StandardCharsets.UTF_8);
         HttpResponse<String> res = postHttp(url, body);
@@ -223,7 +227,6 @@ public final class JenkinsUtils {
     }
 
     static void revokeTokens() {
-        ProjectUtils.log("Revoking all existing API tokens...");
         postHttp(ProjectUtils.getUrl() + "me/descriptorByName/jenkins.security.ApiTokenProperty/revokeAll", "");
     }
 }

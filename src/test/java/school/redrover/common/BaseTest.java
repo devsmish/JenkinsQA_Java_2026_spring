@@ -20,6 +20,11 @@ public abstract class BaseTest {
         }
     }
 
+    @BeforeSuite(alwaysRun = true)
+    public void setupSuiteAuth() {
+        ProjectUtils.initJenkinsAuth();
+    }
+
     @BeforeMethod
     protected void beforeMethod(Method method) {
         ProjectUtils.log("Run %s.%s", this.getClass().getName(), method.getName());
@@ -42,11 +47,6 @@ public abstract class BaseTest {
         }
 
         ProjectUtils.log("Execution time is %.3f sec", (testResult.getEndMillis() - testResult.getStartMillis()) / 1000.0);
-    }
-
-    @AfterSuite
-    public void tearDown() {
-        JenkinsUtils.revokeTokens();
     }
 
     protected WebDriver getDriver() {

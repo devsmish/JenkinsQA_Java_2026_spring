@@ -97,11 +97,23 @@ public final class ProjectUtils {
         return cachedToken;
     }
 
-    public static String getApiToken() {
+    public static void initJenkinsAuth() {
         if (cachedToken == null) {
-            cachedToken = JenkinsUtils.generateApiToken();
+            log("Starting Jenkins access initialization...");
+
+            try {
+                log("Revoking all existing API tokens in Jenkins");
+                JenkinsUtils.revokeTokens();
+
+                log("Generating a fresh API token");
+                cachedToken = JenkinsUtils.generateApiToken();
+
+                log("Jenkins authentication initialized successfully");
+            } catch (Exception e) {
+                log("Failed to initialize Jenkins authentication: {}", e.getMessage());
+                throw new RuntimeException("Critical failure during Jenkins setup", e);
+            }
         }
-        return cachedToken;
     }
 
     public static void log(String message, Object... args) {
