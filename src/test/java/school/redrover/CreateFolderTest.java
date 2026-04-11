@@ -51,9 +51,7 @@ public class CreateFolderTest extends BaseTest {
         getDriver().findElement(By.xpath("//button[@value='Save']"))
                 .click();
 
-        getWait5().until(ExpectedConditions.elementToBeClickable(By.xpath("//a[@class='app-jenkins-logo']"))).click();
-        //getDriver().findElement(By.xpath("//a[@class='app-jenkins-logo']")).click();
-        getWait5().until(ExpectedConditions.elementToBeClickable(By.xpath("//td/a[@href='job/ParentFolder/']"))).click();
+
         getDriver().findElement(By.xpath("//a[@href='newJob']")).click();
         getDriver().findElement(By.xpath("//input[@id='name']"))
                 .sendKeys("ChildFolder");
