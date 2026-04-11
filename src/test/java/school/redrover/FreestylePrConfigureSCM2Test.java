@@ -8,7 +8,7 @@ import school.redrover.common.BaseTest;
 public class FreestylePrConfigureSCM2Test extends BaseTest {
 
     @Test
-    public void changeScmType() {
+    public void testChangeScmType() {
 
         getDriver().findElement(By.xpath("//span[text()='Create a job']")).click();
         getDriver().findElement(By.xpath("//li[contains(@class,'hudson_model_FreeStyleProject')]")).click();
