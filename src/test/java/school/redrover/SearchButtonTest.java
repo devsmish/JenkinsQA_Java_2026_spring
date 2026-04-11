@@ -8,9 +8,6 @@ import org.testng.annotations.Test;
 import school.redrover.common.BaseTest;
 import school.redrover.common.ProjectUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class SearchButtonTest extends BaseTest {
 
     private static final By SEARCH_BUTTON = By.xpath("//button[@id='root-action-SearchAction']");
