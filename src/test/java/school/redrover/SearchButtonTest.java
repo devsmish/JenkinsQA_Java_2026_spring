@@ -51,7 +51,7 @@ public class SearchButtonTest extends BaseTest {
                         (By.xpath("//*[@id='search-results']/a[@href='/job/" + folderName + "/']"))).click();
 
         Assert.assertEquals(getDriver()
-                .findElement(By.xpath("//h1[text()='" + folderName + "']")).getText(), folderName);
+                .findElement(By.xpath("//h1[@class='job-index-headline page-headline']")).getText(), folderName);
     }
 
     @Test
