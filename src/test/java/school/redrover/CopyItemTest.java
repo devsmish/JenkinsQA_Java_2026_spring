@@ -70,40 +70,29 @@ public class CopyItemTest extends BaseTest {
                 .click();
     }
 
-    //@BeforeMethod
-    public void setUpSourceItem() {
+    @BeforeMethod
+    public void setUpSourceItem()  throws InterruptedException{
+        Thread.sleep(5000);
         openPageNewItem();
         enterNewItemName(SOURCE_ITEM_NAME);
         selectFreestyleProject();
         clickOk();
 
+        Thread.sleep(5000);
         getWait10().until(ExpectedConditions.urlContains("/job/" + SOURCE_ITEM_NAME + "/configure"));
 
         fillDescription();
         clickCheckBoxGitHub();
         fillGitURL();
         clickSave();
+
+        Thread.sleep(5000);
         getWait10().until(ExpectedConditions.urlContains("/job/" + SOURCE_ITEM_NAME + "/"));
     }
 
     @Test
     public void testCreateNewItemByCopy() throws InterruptedException {
         Thread.sleep(5000);
-        openPageNewItem();
-        Thread.sleep(5000);
-        enterNewItemName(SOURCE_ITEM_NAME);
-        selectFreestyleProject();
-        clickOk();
-        Thread.sleep(5000);
-        getWait10().until(ExpectedConditions.urlContains("/job/" + SOURCE_ITEM_NAME + "/configure"));
-
-        fillDescription();
-        clickCheckBoxGitHub();
-        fillGitURL();
-        clickSave();
-        Thread.sleep(5000);
-        getWait10().until(ExpectedConditions.urlContains("/job/" + SOURCE_ITEM_NAME + "/"));
-
         openPageNewItem();
         Thread.sleep(5000);
         enterNewItemName(NEW_ITEM_NAME);
