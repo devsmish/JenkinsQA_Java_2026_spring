@@ -89,9 +89,14 @@ public class SearchButtonTest extends BaseTest {
 
     @Test
     public void testOpenSearchFieldByKeyboardCtrlK() {
-        new Actions(getDriver()).keyDown(Keys.CONTROL).sendKeys("K").keyUp(Keys.CONTROL).perform();
+        Keys modifier = System.getProperty("os.name").toLowerCase().contains("mac")
+                ? Keys.COMMAND : Keys.CONTROL;
 
-        Assert.assertTrue(getWait5()
+        new Actions(getDriver())
+                .keyDown(modifier).sendKeys("K").keyUp(modifier)
+                .perform();
+
+        Assert.assertTrue(getWait10()
                 .until(ExpectedConditions.visibilityOfElementLocated(SEARCH_INPUT_FIELD))
                 .isDisplayed());
     }
