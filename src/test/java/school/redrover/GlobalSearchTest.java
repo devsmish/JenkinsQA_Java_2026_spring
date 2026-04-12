@@ -19,8 +19,7 @@ public class GlobalSearchTest extends BaseTest {
         getDriver().findElement(By.id("name")).sendKeys(folderName);
         getDriver().findElement(By.xpath("//li[@class='com_cloudbees_hudson_plugins_folder_Folder']")).click();
 
-        getWait5().until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@type='submit']")));
-        getDriver().findElement(By.xpath("//button[@type='submit']")).click();
+        getWait5().until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@type='submit']"))).click();
 
         getDriver().findElement(By.xpath("//a[@class='app-jenkins-logo']")).click();
 
@@ -47,8 +46,7 @@ public class GlobalSearchTest extends BaseTest {
         createFolder("SecondFolder");
 
         getDriver().findElement(SEARCH_BUTTON).click();
-        getWait5().until(ExpectedConditions.elementToBeClickable(SEARCH_INPUT_FIELD));
-        WebElement searchInput = getDriver().findElement(SEARCH_INPUT_FIELD);
+        WebElement searchInput = getWait5().until(ExpectedConditions.elementToBeClickable(SEARCH_INPUT_FIELD));
         searchInput.sendKeys("FirstFolder");
         searchInput.clear();
         searchInput.sendKeys("SecondFolder");
