@@ -13,6 +13,9 @@ public class SearchButtonTest extends BaseTest {
 
     private static final By SEARCH_BUTTON = By.xpath("//button[@id='root-action-SearchAction']");
     private static final By SEARCH_INPUT_FIELD = By.xpath("//input");
+    private static final String FOLDER_NAME1 = "Partialtest";
+    private static final String FOLDER_NAME2 = "Parttaltest";
+    private static final String PARTIAL_WORD = "Partt";
     private static final By HEADER_LOCATOR = By.id("page-header");
 
 
@@ -86,6 +89,18 @@ public class SearchButtonTest extends BaseTest {
 
         Assert.assertEquals(getDriver()
                 .findElement(By.xpath("//h1[@class='job-index-headline page-headline']")).getText(), folderName);
+    }
+
+    @Test
+    public void testSearchPartialWords() {
+
+        createFolder(FOLDER_NAME1);
+        createFolder(FOLDER_NAME2);
+
+        getDriver().findElement(SEARCH_BUTTON).click();
+        getDriver().findElement(SEARCH_INPUT_FIELD).sendKeys(PARTIAL_WORD);
+
+        Assert.assertEquals(getDriver().findElements(By.xpath("//*[@id='search-results']//a[contains(@href, '" + PARTIAL_WORD + "')]")).size() , 1);
     }
 
     @Test
