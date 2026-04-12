@@ -13,6 +13,7 @@ public class SearchButtonTest extends BaseTest {
 
     private static final By SEARCH_BUTTON = By.xpath("//button[@id='root-action-SearchAction']");
     private static final By SEARCH_INPUT_FIELD = By.xpath("//input");
+    private static final By HEADER_LOCATOR = By.id("page-header");
 
 
     private void createFolder(String folderName) {
@@ -89,6 +90,9 @@ public class SearchButtonTest extends BaseTest {
 
     @Test
     public void testOpenSearchFieldByKeyboardCtrlK() {
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(HEADER_LOCATOR))
+                .isDisplayed();
+
         Keys modifier = System.getProperty("os.name").toLowerCase().contains("mac")
                 ? Keys.COMMAND : Keys.CONTROL;
 
@@ -96,8 +100,10 @@ public class SearchButtonTest extends BaseTest {
                 .keyDown(modifier).sendKeys("k").keyUp(modifier)
                 .perform();
 
+        By searchInputLocator = By.xpath("//input[@id='command-bar']");
+
         Assert.assertTrue(getWait10()
-                .until(ExpectedConditions.visibilityOfElementLocated(SEARCH_INPUT_FIELD))
+                .until(ExpectedConditions.visibilityOfElementLocated(searchInputLocator))
                 .isDisplayed());
     }
 }
