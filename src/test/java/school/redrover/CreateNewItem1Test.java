@@ -13,5 +13,15 @@ public class CreateNewItem1Test extends BaseTest {
         WebElement text = getDriver().findElement(By.xpath("//h1"));
         Assert.assertEquals(text.getText(), "New Item");
     }
+    @Test
+    public void testEnterItemNameIntoField() {
+        getDriver().findElement(By.xpath("//div[@id='tasks']//a[contains(@href, 'newJob')]")).click();
+        WebElement inputName = getDriver().findElement(By.id("name"));
+        inputName.sendKeys("Olga Test");
+        String actualValue = inputName.getAttribute("value");
+        Assert.assertEquals(actualValue, "Olga Test");
 
+
+
+    }
 }
