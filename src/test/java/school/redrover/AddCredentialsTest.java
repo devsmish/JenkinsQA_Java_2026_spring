@@ -9,32 +9,38 @@ import school.redrover.common.BaseTest;
 
 public class AddCredentialsTest extends BaseTest {
 
-    private static final String ADD_CREDENTIALS_BUTTON = "//button[contains(text(),'Add')]";
-    private static final String MODAL_TITLE_XPATH = "//dialog//*[contains(text(), 'Add Credentials')]";
+    private static final String CREDENTIALS_TITLE = "Credentials";
+    private static final String MESSAGE_1 = "'Add credentials' button is not enabled!";
+    private static final String MESSAGE_2 = "The 'Add credentials' modal window did not open!";
+
+
+    private final By manageJenkinsButton = By.id("root-action-ManageJenkinsAction");
+    private final By credentialsButton = By.xpath("//a[@href='credentials']");
+    private final By modalWindow = By.xpath("//dialog//*[contains(text(), 'Add Credentials')]");
+    private final By credentialsTitle = By.xpath("//div[@id='main-panel']//h1");
+    private final By addCredentialsButton = By.xpath("//button[contains(text(),'Add')]");
 
     private void credentialsOpen(){
-        getDriver().findElement(By.id("root-action-ManageJenkinsAction")).click();
-        getDriver().findElement(By.xpath("//a[@href='credentials']")).click();
+        getDriver().findElement(manageJenkinsButton).click();
+        getDriver().findElement(credentialsButton).click();
     }
     private WebElement modalWindow(){
-       return getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.xpath(MODAL_TITLE_XPATH)));
+       return getWait5().until(ExpectedConditions.visibilityOfElementLocated(modalWindow));
     }
     @Test
     public void testAddCredentialsButtonActive(){
         credentialsOpen();
 
-        Assert.assertEquals(getDriver().findElement(By.xpath("//div[@id='main-panel']//h1")).getText(),
-                "Credentials");
-        Assert.assertTrue(getDriver().findElement(By.xpath(ADD_CREDENTIALS_BUTTON)).isEnabled(),
-                "'Add credentials' button is not enabled!");
+        Assert.assertEquals(getDriver().findElement(credentialsTitle).getText(), CREDENTIALS_TITLE);
+        Assert.assertTrue(getDriver().findElement(addCredentialsButton).isEnabled(), MESSAGE_1);
     }
     @Test
     public void testAddCredentialsClick(){
         credentialsOpen();
 
-        getDriver().findElement(By.xpath(ADD_CREDENTIALS_BUTTON)).click();
+        getDriver().findElement(addCredentialsButton).click();
         modalWindow();
 
-        Assert.assertTrue(modalWindow().isDisplayed(), "The 'Add credentials' modal window did not open!");
+        Assert.assertTrue(modalWindow().isDisplayed(), MESSAGE_2);
     }
 }
