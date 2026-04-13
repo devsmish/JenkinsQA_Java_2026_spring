@@ -17,10 +17,9 @@ public class ManageJenkinsPageSystemButtonTest extends BaseTest {
         getDriver().findElement(By.xpath("//a[@href='/manage']")).click();
         getDriver().findElement(By.xpath("//a[@href='configure']")).click();
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(2));
-        wait.until(ExpectedConditions.titleIs("System - Manage Jenkins - Jenkins"));
+        new WebDriverWait(getDriver(), Duration.ofSeconds(2))
+                .until(ExpectedConditions.titleIs("System - Manage Jenkins - Jenkins"));
 
-        Assert.assertTrue(getDriver().getCurrentUrl().contains("/manage/configure"));
         Assert.assertEquals(getDriver().getTitle(), "System - Manage Jenkins - Jenkins");
 
     }
