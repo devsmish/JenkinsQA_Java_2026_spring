@@ -94,14 +94,13 @@ public class SearchButtonTest extends BaseTest {
         final String FOLDER_NAME1 = "Partialtest";
         final String FOLDER_NAME2 = "Parttaltest";
         final String PARTIAL_WORD = "Partt";
+        By partialResult = By.xpath("//*[@id='search-results']//a[contains(@href, '" + PARTIAL_WORD + "')]");
 
         createFolder(FOLDER_NAME1);
         createFolder(FOLDER_NAME2);
 
         openSearchFeild();
         getDriver().findElement(SEARCH_INPUT_FIELD).sendKeys(PARTIAL_WORD);
-
-        By partialResult = By.xpath("//*[@id='search-results']//a[contains(@href, '" + PARTIAL_WORD + "')]");
 
         getWait5().until(ExpectedConditions.presenceOfElementLocated(partialResult));
         Assert.assertEquals(getDriver().findElements(partialResult).size(), 1);
