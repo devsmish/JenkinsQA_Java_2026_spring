@@ -5,7 +5,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.common.BaseTest;
 
-public class AddCredentials extends BaseTest {
+public class AddCredentialsTest extends BaseTest {
     @Test
     public void testAddCredentialsButtonActive(){
         getDriver().findElement(By.id("root-action-ManageJenkinsAction")).click();
