@@ -21,7 +21,7 @@ public class FolderConfigurationTest extends BaseTest {
         getDriver().findElement(By.xpath("//span[text()='Folder']")).click();
         getWait10().until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@id='ok-button']"))).click();
 
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h1")));
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h1[normalize-space()='Configuration']")));
         getDriver().findElement(By.xpath("//span[text()='Jenkins']")).click();
 
         getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[@class='jenkins-table__link model-link inside']")));
