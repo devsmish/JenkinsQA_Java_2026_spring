@@ -2,6 +2,7 @@ package school.redrover;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
@@ -15,6 +16,7 @@ public class SearchButtonTest extends BaseTest {
 
     private static final By SEARCH_BUTTON = By.xpath("//button[@id='root-action-SearchAction']");
     private static final By SEARCH_INPUT_FIELD = By.xpath("//input");
+    private static final By SEARCH_INPUT_LOCATOR = By.xpath("//input[@id='command-bar']");
     private static final By HEADER_LOCATOR = By.id("page-header");
 
 
@@ -34,8 +36,21 @@ public class SearchButtonTest extends BaseTest {
 
     }
 
-    public void openSearchFeild() {
-        getDriver().findElement(SEARCH_BUTTON).click();
+    public void openSearchField() {
+        click(SEARCH_BUTTON);
+    }
+
+    private void click(By locator) {
+        getDriver().findElement(locator).click();
+    }
+
+    private void sendKeys(By locator, String text) {
+        getDriver().findElement(locator).clear();
+        getDriver().findElement(locator).sendKeys(text);
+    }
+
+    private WebElement waitElementVisibility(By locator) {
+       return getWait5().until(ExpectedConditions.visibilityOfElementLocated(locator));
     }
 
     public static String randomLatinString(int length) {
@@ -117,7 +132,7 @@ public class SearchButtonTest extends BaseTest {
         createFolder(FOLDER_NAME1);
         createFolder(FOLDER_NAME2);
 
-        openSearchFeild();
+        openSearchField();
         getDriver().findElement(SEARCH_INPUT_FIELD).sendKeys(PARTIAL_WORD);
 
         getWait5().until(ExpectedConditions.presenceOfElementLocated(PARTIAL_RESULT));
@@ -126,8 +141,7 @@ public class SearchButtonTest extends BaseTest {
 
     @Test
     public void testOpenSearchFieldByKeyboardCtrlK() {
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(HEADER_LOCATOR))
-                .isDisplayed();
+        waitElementVisibility(HEADER_LOCATOR).isDisplayed();
 
         Keys modifier = System.getProperty("os.name").toLowerCase().contains("mac")
                 ? Keys.COMMAND : Keys.CONTROL;
@@ -136,18 +150,14 @@ public class SearchButtonTest extends BaseTest {
                 .keyDown(modifier).sendKeys("k").keyUp(modifier)
                 .perform();
 
-        By searchInputLocator = By.xpath("//input[@id='command-bar']");
-
-        Assert.assertTrue(getWait10()
-                .until(ExpectedConditions.visibilityOfElementLocated(searchInputLocator))
-                .isDisplayed());
+        Assert.assertTrue(waitElementVisibility(SEARCH_INPUT_LOCATOR).isDisplayed());
     }
 
     @Test
     public void testSearchLongQuery() {
         final String CHARACTERS_2000 = randomLatinString(2000);
 
-        openSearchFeild();
+        openSearchField();
         getDriver().findElement(SEARCH_INPUT_FIELD).sendKeys(CHARACTERS_2000);
 
         Assert.assertEquals(getDriver()
