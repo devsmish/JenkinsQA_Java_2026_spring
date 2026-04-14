@@ -42,6 +42,60 @@ public class SingIn2Test extends BaseTest {
         Assert.assertTrue(actualColor.contains("oklch(0.6 0.2671 30)"),
                 "Цвет текста ошибки не красный: " + actualColor);
     }
+
+    @Test
+    public void testLoginPageElementsPresence() {
+        JenkinsUtils.logout(getDriver());
+
+        WebElement usernameField = getWait10().until(
+                ExpectedConditions.visibilityOfElementLocated(By.id("j_username"))
+        );
+
+        Assert.assertTrue(usernameField.isDisplayed(), "Поле Username не отображается");
+        Assert.assertTrue(usernameField.isEnabled(), "Поле Username не активно");
+
+        WebElement passwordField = getDriver().findElement(By.id("j_password"));
+        Assert.assertTrue(passwordField.isDisplayed(), "Поле Password не отображается");
+        Assert.assertTrue(passwordField.isEnabled(), "Поле Password не активно");
+
+        WebElement signInButton = getDriver().findElement(By.xpath("//button[@type='submit']"));
+        Assert.assertTrue(signInButton.isDisplayed(), "Кнопка Sign in не отображается");
+        Assert.assertTrue(signInButton.isEnabled(), "Кнопка Sign in не активна");
+
+    }
+
+    private static final String VALID_USERNAME = "User123";
+    private static final String VALID_PASSWORD = "User123";
+
+    @Test
+    public void testClearFieldsAndReEnterCredentials() {
+        JenkinsUtils.logout(getDriver());
+
+        WebElement usernameField = getWait10().until(
+                ExpectedConditions.visibilityOfElementLocated(By.id("j_username"))
+        );
+        WebElement passwordField = getDriver().findElement(By.id("j_password"));
+        WebElement signInButton = getDriver().findElement(By.xpath("//button[@type='submit']"));
+
+        usernameField.sendKeys("wronguser");
+        passwordField.sendKeys("wrongpass");
+
+        usernameField.clear();
+        passwordField.clear();
+
+        Assert.assertEquals(usernameField.getAttribute("value"), "", "Поле Username не очистилось");
+        Assert.assertEquals(passwordField.getAttribute("value"), "", "Поле Password не очистилось");
+
+        usernameField.sendKeys(VALID_USERNAME);
+        passwordField.sendKeys(VALID_PASSWORD);
+
+        signInButton.click();
+
+        WebElement newItemLink = getWait10().until(
+                ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[contains(text(),'New Item')]"))
+        );
+        Assert.assertTrue(newItemLink.isDisplayed(), "Не удалось войти в систему после очистки полей");
+    }
     }
 
 
