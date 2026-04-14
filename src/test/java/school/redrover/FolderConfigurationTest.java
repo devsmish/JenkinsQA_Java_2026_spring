@@ -31,7 +31,7 @@ public class FolderConfigurationTest extends BaseTest {
         getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@name='_.displayNameOrNull']"))).sendKeys(FOLDER_NAME2);
         getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
 
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h1")));
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h1[@class='job-index-headline page-headline']")));
         getDriver().findElement(By.xpath("//span[text()='Jenkins']")).click();
 
         WebElement newName = getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[@class='jenkins-table__link model-link inside']")));
