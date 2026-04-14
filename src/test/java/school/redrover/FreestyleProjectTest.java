@@ -2,6 +2,7 @@ package school.redrover;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -98,7 +99,7 @@ public class FreestyleProjectTest extends BaseTest {
         Assert.assertEquals(getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.id("notification-bar"))).getText(),
                 "Build scheduled");
     }
-    @Ignore
+
     @Test
     public void testBuildAfterOtherProjectsAreBuild() {
         createNewProject("FreestyleProject");
@@ -112,13 +113,16 @@ public class FreestyleProjectTest extends BaseTest {
                 getDriver().findElement(By.xpath("//input[@id='cb14']/ancestor::span")));
 
         getDriver().findElement(By.xpath("//label[contains(text(), 'Build after other projects are built')]")).click();
-        getDriver().findElement(By.name("_.upstreamProjects")).sendKeys("FreestyleProject");
-        getDriver().findElement(By.xpath("//label[contains(text(), 'Trigger even if the build fails')]")).click();
+        getWait5().until(ExpectedConditions.presenceOfElementLocated(By.name("_.upstreamProjects")))
+                .sendKeys("FreestyleProject", Keys.TAB);
+        getWait10().until(ExpectedConditions.elementToBeClickable(By.xpath("//label[contains(text(), 'Trigger even if the build fails')]"))).click();
         getDriver().findElement(By.name("Submit")).click();
-        getWait5().until(ExpectedConditions.textToBePresentInElementLocated(By.tagName("h1"), "FreestyleProject2"));
-        getWait10().until(ExpectedConditions.elementToBeClickable(By.xpath("//span[text()='Status']/.."))).click();
+        getWait10().until(ExpectedConditions.textToBePresentInElementLocated(By.tagName("h1"), "FreestyleProject2"));
 
-        Assert.assertEquals(getDriver().findElement(By.xpath("//div[@id='main-panel']/h2[1]")).getText(),
+        WebElement statusButton = getWait10().until(ExpectedConditions.presenceOfElementLocated(By.xpath("//span[text()='Status']/..")));
+        ((JavascriptExecutor) getDriver()).executeScript("arguments[0].click();", statusButton);
+        
+        Assert.assertEquals(getWait10().until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@id='main-panel']/h2[1]"))).getText(),
                 "Upstream Projects");
         Assert.assertEquals(getDriver().findElement(By.xpath("//a[contains(@class,'model-link')]")).getText(),
                 "FreestyleProject");
