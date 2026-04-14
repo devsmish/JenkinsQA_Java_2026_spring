@@ -83,13 +83,12 @@ public class SingIn2Test extends BaseTest {
         usernameField.clear();
         passwordField.clear();
 
-        Assert.assertEquals(usernameField.getAttribute("value"), "", "Поле Username не очистилось");
-        Assert.assertEquals(passwordField.getAttribute("value"), "", "Поле Password не очистилось");
+        Assert.assertEquals(usernameField.getAttribute("value"), "");
+        Assert.assertEquals(passwordField.getAttribute("value"), "");
 
-        usernameField.sendKeys(VALID_USERNAME);
-        passwordField.sendKeys(VALID_PASSWORD);
 
-        signInButton.click();
+        JenkinsUtils.login(getDriver());
+
 
         WebElement userButton = getWait10().until(
                 ExpectedConditions.visibilityOfElementLocated(By.id("root-action-UserAction"))
