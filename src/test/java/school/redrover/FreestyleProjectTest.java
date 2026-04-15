@@ -99,7 +99,6 @@ public class FreestyleProjectTest extends BaseTest {
         Assert.assertEquals(getWait5().until(ExpectedConditions.visibilityOfElementLocated(By.id("notification-bar"))).getText(),
                 "Build scheduled");
     }
-
     @Ignore
     @Test
     public void testBuildAfterOtherProjectsAreBuild() {
