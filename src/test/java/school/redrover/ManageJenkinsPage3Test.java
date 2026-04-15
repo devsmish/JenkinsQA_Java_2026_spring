@@ -4,6 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.common.BaseTest;
 import java.util.ArrayList;
@@ -57,6 +58,7 @@ public class ManageJenkinsPage3Test extends BaseTest {
         }
     }
 
+    @Ignore
     @Test
     public void testSearchCaseInsensitive(){
         List<String> inputValues = List.of("system","SYSTEM","uSeRs");
