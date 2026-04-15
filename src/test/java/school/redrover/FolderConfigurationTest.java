@@ -17,7 +17,7 @@ public class FolderConfigurationTest extends BaseTest {
     }
 
     private void goToMainPage() {
-        getDriver().findElement(By.xpath("//span[text()='Jenkins']")).click();
+        getWait10().until(ExpectedConditions.elementToBeClickable(By.xpath("//span[text()='Jenkins']"))).click();
     }
 
     @Test
