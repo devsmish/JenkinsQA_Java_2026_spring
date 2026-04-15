@@ -22,24 +22,22 @@ public class FolderConfigurationTest extends BaseTest {
 
     @Test
     public void testRename() {
-        createFolder("FolderName1");
 
-        final String FOLDER_NAME2 = "FolderName2";
+        final String FOLDER_NAME = "FolderName";
+        final String FOLDER_NEW_NAME = "FolderNewName";
 
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[@class='jenkins-table__link model-link inside']")));
+        createFolder(FOLDER_NAME);
+        goToMainPage();
+
         getWait10().until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@class='jenkins-menu-dropdown-chevron']"))).click();
         getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[normalize-space()='Configure']"))).click();
 
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@name='_.displayNameOrNull']"))).sendKeys(FOLDER_NAME2);
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@name='_.displayNameOrNull']"))).sendKeys(FOLDER_NEW_NAME);
         getDriver().findElement(By.xpath("//button[@name='Submit']")).click();
 
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h1[@class='job-index-headline page-headline']")));
-        goToMainPage();
+        WebElement name = getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h1")));
 
-        WebElement name = getWait10().until(ExpectedConditions.visibilityOfElementLocated
-                (By.xpath("//a[@class='jenkins-table__link model-link inside']")));
-
-        Assert.assertEquals(name.getText(), FOLDER_NAME2);
+        Assert.assertEquals(name.getText(), FOLDER_NEW_NAME);
     }
 
     @Test
