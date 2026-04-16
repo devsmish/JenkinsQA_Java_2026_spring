@@ -6,6 +6,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.common.BaseTest;
+import school.redrover.common.ProjectUtils;
 
 public class FolderConfigurationTest extends BaseTest {
 
@@ -17,7 +18,7 @@ public class FolderConfigurationTest extends BaseTest {
     }
 
     private void goToMainPage() {
-        getDriver().findElement((By.xpath("//a[@href='/' or contains(@href,'/')]"))).click();
+        ProjectUtils.get(getDriver());
     }
 
     @Test
