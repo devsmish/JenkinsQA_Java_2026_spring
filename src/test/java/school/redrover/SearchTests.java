@@ -50,7 +50,20 @@ public class SearchTests extends BaseTest {
 
         List<WebElement> resultsList = getDriver().findElements(SEARCH_RESULTS);
 
-        Assert.assertEquals(resultsList.size(), 1);
-        Assert.assertEquals(resultsList.get(0).getText(), jobTitles.get(1));
+        Assert.assertTrue(resultsList.size() == 1 && resultsList.get(0).getText().equals(jobTitles.get(1)));
+    }
+
+    @Test(dependsOnMethods = "testEnteringPartialWords")
+    public void searchExistingJob(){
+
+        String jobTitle = "Partialtest";
+
+        getWait2().until(ExpectedConditions.elementToBeClickable(SEARCH_BUTTON)).click();
+        getWait2().until(ExpectedConditions.elementToBeClickable(SEARCH_RESULTS));
+        getDriver().findElement(SEARCH_INPUT_FIELD).sendKeys(jobTitle);
+        getWait2().until(ExpectedConditions.textToBe(SEARCH_RESULTS, jobTitle));
+        getDriver().findElement(SEARCH_RESULTS).click();
+
+        Assert.assertTrue(getWait2().until(ExpectedConditions.urlContains("/job/" + jobTitle)));
     }
 }
