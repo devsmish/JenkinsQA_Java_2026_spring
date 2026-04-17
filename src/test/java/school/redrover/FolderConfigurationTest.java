@@ -17,7 +17,7 @@ public class FolderConfigurationTest extends BaseTest {
         getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@id='name']"))).sendKeys(name);
         getDriver().findElement(By.xpath("//span[text()='Folder']")).click();
         getWait10().until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@id='ok-button']"))).click();
-        getWait10().until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@name='Submit']"))).click();
+        getWait10().until(ExpectedConditions.presenceOfElementLocated(By.name("Submit")));
     }
 
     private void goToMainPage() {
