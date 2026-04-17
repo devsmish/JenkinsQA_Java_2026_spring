@@ -11,6 +11,7 @@ import school.redrover.common.BaseTest;
 public class FolderConfigurationTest extends BaseTest {
     public static final String FOLDER_NAME = "FolderInitial";
     public static final By FOLDER_NAME_MAIN_PAGE = By.cssSelector(".jenkins-table__link > span:first-child");
+    public final String FOLDER_NEW_NAME = "FolderNewName";
 
     private void createFolder(String name) {
         getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
@@ -42,14 +43,17 @@ public class FolderConfigurationTest extends BaseTest {
 
     @Test(dependsOnMethods = "testCreate")
     public void testRename() {
-        final String FOLDER_NEW_NAME = "FolderNewName";
 
-        goToMainPage();
-        goToConfigPage();
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[normalize-space()='Configure']"))).click();
+        getWait5().until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//td/a[@href='job/%s/']".formatted(FOLDER_NAME)))).click();
 
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@name='_.displayNameOrNull']"))).sendKeys(FOLDER_NEW_NAME);
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[@name='Submit']"))).click();
+        getWait5().until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//a[@href='/job/%s/confirm-rename']".formatted(FOLDER_NAME)))).click();
+
+        WebElement newName = getWait5().until(ExpectedConditions.elementToBeClickable(By.xpath("//input[@name='newName']")));
+        newName.clear();
+        newName.sendKeys(FOLDER_NEW_NAME);
+        getDriver().findElement(By.xpath("//button[@value='Rename']")).click();
 
         goToMainPage();
 
