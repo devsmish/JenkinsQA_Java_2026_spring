@@ -53,7 +53,14 @@ public class SignOutTest extends BaseTest {
     @Test (dependsOnMethods = "testSingOutIsImmediate")
     public void testJenkinsSingOutButton() {
 
-        WebElement userButton = getDriver().findElement(By.id("root-action-UserAction"));
+        String currentUrl = getDriver().getCurrentUrl();
+        String baseUrl = currentUrl.replaceFirst("(https?://[^/]+).*", "$1");
+        getDriver().get(baseUrl);
+        JenkinsUtils.login(getDriver());
+
+        WebElement userButton = getWait10().until(
+                ExpectedConditions.visibilityOfElementLocated(By.id("root-action-UserAction"))
+        );
 
         Actions actions = new Actions(getDriver());
         actions.moveToElement(userButton).perform();
