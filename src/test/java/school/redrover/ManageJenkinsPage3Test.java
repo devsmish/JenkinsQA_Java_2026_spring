@@ -6,10 +6,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import school.redrover.common.BaseTest;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -18,7 +16,6 @@ public class ManageJenkinsPage3Test extends BaseTest {
     private static final By MANAGE_JENKINS_LINK = By.cssSelector("a[href='/manage']");
     private static final By CONFIGURE_SYSTEM_LINK = By.xpath("//a[contains(@href, 'configure')]");
     private static final By SEARCH_BAR = By.id("settings-search-bar");
-    private static final By RESULT_DROPDOWN = By.xpath("//div[@class='jenkins-dropdown']");
     private static final By EMPTY_DROPDOWN = By.className("jenkins-search__results__no-results-label");
     private static final By HEADER = By.xpath("//h1");
 
@@ -68,34 +65,30 @@ public class ManageJenkinsPage3Test extends BaseTest {
         }
     }
 
-    @Test
-    public void testSearchCaseInsensitive() {
-        List<String> inputValues = List.of("system", "SYSTEM", "uSeRs");
-        List<String> expectedSections = List.of("System", "System", "Users");
-        List<String> actualSections = new ArrayList<>();
+    @DataProvider
+    public Object[][] caseInSensitive() {
+        return new Object[][]{
+                {"system", "System"},
+                {"SYSTEM", "System"},
+                {"uSeRs", "Users"}
+        };
+    }
+
+    @Test(dataProvider = "caseInSensitive")
+    public void testSearchCaseInsensitive(String input, String expOutput) {
 
         getWait10().until(ExpectedConditions.elementToBeClickable(MANAGE_JENKINS_LINK)).click();
         getWait10().until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//h1"), "Manage Jenkins"));
 
         WebElement searchBar = getDriver().findElement(SEARCH_BAR);
+        searchBar.sendKeys(input);
 
-        for (String input : inputValues) {
-            searchBar.sendKeys(input);
-            getWait10().until(d -> {
-                String text = d.findElement(RESULT_DROPDOWN).getText();
-                return text != null && !text.trim().isEmpty();
-            });
+        String actualOutput = getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[contains(@class, 'jenkins-dropdown__item')]"))).getText();
 
-            actualSections.add(getDriver().findElement(By.xpath("//a[contains(@class, 'jenkins-dropdown__item')]")).getText());
-
-            searchBar.sendKeys(Keys.CONTROL + "a");
-            searchBar.sendKeys(Keys.BACK_SPACE);
-            getWait10().until(ExpectedConditions.invisibilityOfElementLocated(RESULT_DROPDOWN));
-        }
-
-        Assert.assertEquals(actualSections, expectedSections);
+        Assert.assertEquals(actualOutput, expOutput);
 
     }
+
 
     @DataProvider
     public Object[][] invalidInput() {
