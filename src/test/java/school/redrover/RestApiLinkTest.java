@@ -8,9 +8,9 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import school.redrover.common.BaseTest;
 
-public class RestApiPageTest extends BaseTest {
+public class RestApiLinkTest extends BaseTest {
 
-    @Test
+    @Test (dependsOnMethods = "testRestApiLinkOpensInSameTab")
     public void testRestApiLinkIsHiddenOnApiPage() {
 
         JavascriptExecutor js = (JavascriptExecutor) getDriver();
@@ -63,7 +63,7 @@ public class RestApiPageTest extends BaseTest {
         Assert.assertEquals(cursor, "pointer", "У ссылки должен быть курсор pointer при наведении");
     }
 
-    @Test
+    @Test (dependsOnMethods = "testRestApiLinkOpensInSameTab")
     public void testReturnWithBackButton() {
         JavascriptExecutor js = (JavascriptExecutor) getDriver();
 
