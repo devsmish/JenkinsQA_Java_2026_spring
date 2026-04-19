@@ -18,6 +18,7 @@ import java.util.List;
 public class FreestyleProjectTest extends BaseTest {
 
     private final static String PROJECT_NAME = "FreestyleProject";
+    private final static String NEW_PROJECT_NAME= "FreestyleProject2";
 
     private void createNewProject(String projectName) {
         getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
@@ -74,6 +75,22 @@ public class FreestyleProjectTest extends BaseTest {
         Assert.assertEquals(getDriver().findElement(
                         By.className("jenkins-toggle-switch__label__checked-title")).getText(),
                 "Enabled");
+    }
+
+    @Test
+    public void testRename() {
+        createNewProject(PROJECT_NAME);
+        getWait10().until(ExpectedConditions.elementToBeClickable(
+                By.cssSelector("a.app-jenkins-logo"))).click();
+        getWait10().until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//span[text()='%s']".formatted(PROJECT_NAME)))).click();
+        getWait10().until(ExpectedConditions.elementToBeClickable(By.xpath("//span[text()='Rename']/.."))).click();
+        getDriver().findElement(By.xpath("//input[@name='newName']")).clear();
+        getDriver().findElement(By.xpath("//input[@name='newName']")).sendKeys(NEW_PROJECT_NAME);
+        getDriver().findElement(By.name("Submit")).click();
+
+        Assert.assertEquals(getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id='main-panel']//h1"))).getText(),
+                NEW_PROJECT_NAME);
     }
 
     @Test
