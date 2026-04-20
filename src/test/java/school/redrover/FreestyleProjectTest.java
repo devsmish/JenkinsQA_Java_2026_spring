@@ -150,8 +150,8 @@ public class FreestyleProjectTest extends BaseTest {
     @Test(dependsOnMethods = "testBuildAfterOtherProjectsAreBuild")
     public void testDelete() {
         getWait10().until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//span[text()='%s']".formatted(PROJECT_NAME)))).click();
-        getWait10().until(ExpectedConditions.textToBePresentInElementLocated(By.tagName("h1"), PROJECT_NAME));
+                By.xpath("//span[text()='%s']".formatted(NEW_PROJECT_NAME_2)))).click();
+        getWait10().until(ExpectedConditions.textToBePresentInElementLocated(By.tagName("h1"), NEW_PROJECT_NAME_2));
         getWait10().until(ExpectedConditions.elementToBeClickable(By.xpath("//a[@data-title='Delete Project']"))).click();
         getDriver().findElement(By.xpath("//button[@data-id='ok']")).click();
         List<String> listOfJobs = getDriver().findElements(By.cssSelector(".jenkins-table__link > span:nth-child(1)")).stream()
