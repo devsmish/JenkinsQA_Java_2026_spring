@@ -222,12 +222,14 @@ public class FreestyleProjectTest extends BaseTest {
 
     }
 
-    @Test(dependsOnMethods = "testAddBuildStepDropdownContainsAllOptions")
+    @Test
     public void testDeleteBuildStep() {
 
-        getDriver().findElement(By.xpath("//button[@class='jenkins-menu-dropdown-chevron']")).click();
-        getWait10().until(ExpectedConditions.elementToBeClickable(By.xpath("//a[contains(@href, '/configure')]")))
-                .click();
+        getDriver().findElement(By.xpath("//a[@href='/view/all/newJob']")).click();
+        getDriver().findElement(By.id("name")).sendKeys(PROJECT_NAME);
+        getDriver().findElement(By.xpath("//li[@class='hudson_model_FreeStyleProject']")).click();
+        getDriver().findElement(By.id("ok-button")).click();
+
 
         WebElement addBuildStepButton = getWait10().until(
                 ExpectedConditions.elementToBeClickable(By.xpath("//button[@suffix='builder']")));
