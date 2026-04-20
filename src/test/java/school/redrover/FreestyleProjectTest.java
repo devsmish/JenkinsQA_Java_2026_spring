@@ -199,10 +199,13 @@ public class FreestyleProjectTest extends BaseTest {
         getDriver().findElement(By.xpath("//li[@class='hudson_model_FreeStyleProject']")).click();
         getDriver().findElement(By.id("ok-button")).click();
 
-        ((JavascriptExecutor) getDriver()).executeScript("window.scrollTo(0, document.body.scrollHeight);");
         WebElement addBuildStepButton = getWait10().until(
-                ExpectedConditions.visibilityOfElementLocated(
-                        By.xpath("//button[@suffix='builder']")));
+                ExpectedConditions.presenceOfElementLocated(By.xpath("//button[@suffix='builder']"))
+        );
+        ((JavascriptExecutor) getDriver()).executeScript("arguments[0].scrollIntoView(true);", addBuildStepButton);
+
+        getWait5().until(ExpectedConditions.elementToBeClickable(addBuildStepButton));
+
         addBuildStepButton.click();
 
         List<WebElement> dropdownItems = getWait10().until(
