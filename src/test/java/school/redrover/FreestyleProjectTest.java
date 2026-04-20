@@ -160,7 +160,7 @@ public class FreestyleProjectTest extends BaseTest {
         Assert.assertEquals(listOfJobs.size(), 1);
     }
 
-    @Test(dependsOnMethods = "testDelete")
+    @Test
     public void testAddBuildStepDropdownContainsAllOptions(){
 
         List<String> expectedTexts = Arrays.asList(
