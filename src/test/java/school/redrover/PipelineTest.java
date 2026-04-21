@@ -22,8 +22,7 @@ public class PipelineTest extends BaseTest {
         getDriver().findElement(By.xpath("//span[text()='Pipeline']")).click();
         getDriver().findElement(By.id("ok-button")).click();
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("app-jenkins-logo"))).click();
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.className("app-jenkins-logo"))).click();
 
         WebElement actualProjectName = getDriver().findElement(By.xpath("//span[text()='%s']".formatted(projectName)));
         Assert.assertEquals(actualProjectName.getText(), projectName);
