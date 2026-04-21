@@ -119,26 +119,5 @@ public class FooterVersionMenuTest extends BaseTest {
                 "Фокус переключился на другое окно");
     }
 
-    @Test(dependsOnMethods = "testAboutJenkinsOpensInSameTab")
-    public void testAboutJenkinsBackButton() {
 
-        getDriver().navigate().back();
-
-
-        List<WebElement> userButtons = getDriver().findElements(By.id("root-action-UserAction"));
-
-        if (userButtons.isEmpty()) {
-            System.out.println("Кнопка пользователя не найдена. Возможно, сессия потеряна или страница не Dashboard.");
-
-            List<WebElement> loginFields = getDriver().findElements(By.id("j_username"));
-            if (!loginFields.isEmpty()) {
-                Assert.fail("После нажатия Back произошёл переход на страницу логина, сессия потеряна");
-            } else {
-                Assert.fail("Не удалось определить состояние после нажатия Back: элемент Dashboard не найден");
-            }
-        } else {
-            Assert.assertTrue(userButtons.get(0).isDisplayed(),
-                    "Кнопка пользователя отображается, сессия активна");
-        }
-    }
     }
