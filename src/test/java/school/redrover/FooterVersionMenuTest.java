@@ -121,15 +121,15 @@ public class FooterVersionMenuTest extends BaseTest {
 
     @Test(dependsOnMethods = "testAboutJenkinsOpensInSameTab")
     public void testAboutJenkinsBackButton() {
-        // Нажимаем кнопку "Назад"
+
         getDriver().navigate().back();
 
-        // Проверяем наличие кнопки пользователя (признак активной сессии на Dashboard)
+
         List<WebElement> userButtons = getDriver().findElements(By.id("root-action-UserAction"));
 
         if (userButtons.isEmpty()) {
             System.out.println("Кнопка пользователя не найдена. Возможно, сессия потеряна или страница не Dashboard.");
-            // Проверяем, не оказались ли мы на странице логина
+            /
             List<WebElement> loginFields = getDriver().findElements(By.id("j_username"));
             if (!loginFields.isEmpty()) {
                 Assert.fail("После нажатия Back произошёл переход на страницу логина, сессия потеряна");
