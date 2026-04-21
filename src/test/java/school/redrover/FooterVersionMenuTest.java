@@ -1,7 +1,9 @@
 package school.redrover;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -72,5 +74,43 @@ public class FooterVersionMenuTest extends BaseTest {
         Assert.assertEquals(getDriver().getCurrentUrl(), "https://www.jenkins.io/");
     }
 
+    @Test
+    public void testAboutJenkinsOpensInSameTab() {
+
+        getDriver().findElement(By.tagName("body")).sendKeys(Keys.END);
+
+        WebElement jenkinsVersionLink = getWait10().until(
+                ExpectedConditions.visibilityOfElementLocated(By.xpath("//footer//a[contains(text(),'Jenkins') and contains(text(),'.')]"))
+        );
+
+        Actions actions = new Actions(getDriver());
+        actions.moveToElement(jenkinsVersionLink).perform();
+
+        WebElement aboutJenkinsMenu = getWait5().until(
+                ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[contains(text(),'About Jenkins')]"))
+        );
+
+        String originalWindow = getDriver().getWindowHandle();
+
+        aboutJenkinsMenu.click();
+
+        Assert.assertEquals(getDriver().getWindowHandles().size(), 1,
+                "Открылось новое окно или вкладка, а должно быть в том же окне");
+
+        Assert.assertEquals(getDriver().getWindowHandle(), originalWindow,
+                "Фокус переключился на другое окно");
+    }
+
+    @Test(dependsOnMethods = "testAboutJenkinsOpensInSameTab")
+    public void testAboutJenkinsBackButton() {
+
+        getDriver().navigate().back();
+
+        boolean isUserButtonVisible = getWait10().until(
+                ExpectedConditions.visibilityOfElementLocated(By.id("root-action-UserAction"))
+        ).isDisplayed();
+
+        Assert.assertTrue(isUserButtonVisible, "Сессия не активна после нажатия Back");
+    }
 
     }
