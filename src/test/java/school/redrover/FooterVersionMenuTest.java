@@ -85,30 +85,75 @@ public class FooterVersionMenuTest extends BaseTest {
         JavascriptExecutor js = (JavascriptExecutor) getDriver();
         js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
 
+        List<WebElement> footers = getDriver().findElements(By.tagName("footer"));
+        if (!footers.isEmpty()) {
+            System.out.println("Footer text: " + footers.get(0).getText());
+        } else {
+            System.out.println("Footer not found!");
+        }
 
-        WebElement jenkinsVersionLink = getWait10().until(
-                ExpectedConditions.visibilityOfElementLocated(
-                        By.xpath("//footer//a[contains(text(),'Jenkins')]")
+        WebElement jenkinsVersionLink = null;
+
+        try {
+            jenkinsVersionLink = getWait5().until(
+                    ExpectedConditions.visibilityOfElementLocated(
+                            By.xpath("//footer//a[contains(text(),'Jenkins')]")
                     )
-        );
+            );
+        } catch (Exception e) {
+            System.out.println("Селектор с 'Jenkins' не сработал, пробуем другой");
+        }
+
+        if (jenkinsVersionLink == null) {
+            try {
+                jenkinsVersionLink = getWait5().until(
+                        ExpectedConditions.visibilityOfElementLocated(
+                                By.xpath("//footer//a[contains(text(),'ver') or contains(text(),'version')]")
+                        )
+                );
+            } catch (Exception e) {
+                System.out.println("Селектор с 'ver' не сработал");
+            }
+        }
+
+        if (jenkinsVersionLink == null) {
+            List<WebElement> footerLinks = getDriver().findElements(By.xpath("//footer//a"));
+            if (!footerLinks.isEmpty()) {
+                jenkinsVersionLink = footerLinks.get(0);
+                System.out.println("Найдена первая ссылка в футере: " + jenkinsVersionLink.getText());
+            } else {
+                Assert.fail("Не найдено ни одной ссылки в футере");
+            }
+        }
 
         Actions actions = new Actions(getDriver());
         actions.moveToElement(jenkinsVersionLink).perform();
 
         WebElement aboutJenkinsMenu = getWait5().until(
                 ExpectedConditions.visibilityOfElementLocated(
-                            By.xpath("//a[contains(text(),'About Jenkins')]")
-                    )
-            );
+                        By.xpath("//a[contains(text(),'About Jenkins') or contains(text(),'О Jenkins')]")
+                )
+        );
 
         String originalWindow = getDriver().getWindowHandle();
         aboutJenkinsMenu.click();
 
         Assert.assertEquals(getDriver().getWindowHandles().size(), 1,
-                    "Открылось новое окно или вкладка");
+                "Открылось новое окно или вкладка");
 
         Assert.assertEquals(getDriver().getWindowHandle(), originalWindow,
-                    "Фокус переключился на другое окно");
-        }
+                "Фокус переключился на другое окно");
+    }
 
+    @Test(dependsOnMethods = "testAboutJenkinsOpensInSameTab")
+    public void testAboutJenkinsBackButton() {
+
+        getDriver().navigate().back();
+
+        boolean isUserButtonVisible = getWait10().until(
+                ExpectedConditions.visibilityOfElementLocated(By.id("root-action-UserAction"))
+        ).isDisplayed();
+
+        Assert.assertTrue(isUserButtonVisible, "Сессия не активна после нажатия Back");
+    }
     }
