@@ -1,6 +1,7 @@
 package school.redrover;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -77,25 +78,35 @@ public class FooterVersionMenuTest extends BaseTest {
     @Test
     public void testAboutJenkinsOpensInSameTab() {
 
-        getDriver().findElement(By.tagName("body")).sendKeys(Keys.END);
+        JavascriptExecutor js = (JavascriptExecutor) getDriver();
+        js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
+
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
 
         WebElement jenkinsVersionLink = getWait10().until(
-                ExpectedConditions.visibilityOfElementLocated(By.xpath("//footer//a[contains(text(),'Jenkins') and contains(text(),'.')]"))
+                ExpectedConditions.visibilityOfElementLocated(
+                        By.xpath("//footer//a[contains(@href,'about')]")
+                )
         );
 
         Actions actions = new Actions(getDriver());
         actions.moveToElement(jenkinsVersionLink).perform();
 
         WebElement aboutJenkinsMenu = getWait5().until(
-                ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[contains(text(),'About Jenkins')]"))
+                ExpectedConditions.visibilityOfElementLocated(
+                        By.xpath("//a[contains(text(),'About Jenkins') or contains(text(),'О Jenkins')]")
+                )
         );
 
         String originalWindow = getDriver().getWindowHandle();
-
         aboutJenkinsMenu.click();
 
         Assert.assertEquals(getDriver().getWindowHandles().size(), 1,
-                "Открылось новое окно или вкладка, а должно быть в том же окне");
+                "Открылось новое окно или вкладка");
 
         Assert.assertEquals(getDriver().getWindowHandle(), originalWindow,
                 "Фокус переключился на другое окно");
